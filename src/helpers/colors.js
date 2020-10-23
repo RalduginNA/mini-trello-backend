@@ -1,4 +1,4 @@
-const colors = require('colors/safe')
+import colors from 'colors/safe'
 
 colors.setTheme({
   info: 'green',
@@ -7,4 +7,4 @@ colors.setTheme({
   error: 'red',
 })
 
-module.exports = colors
+export default colors

@@ -1,5 +1,5 @@
-const Router = require('@koa/router')
-const UserModel = require('../../models/User')
+import Router from '@koa/router'
+import UserModel from '../../models/User'
 
 const router = new Router({ prefix: '/users' })
 
@@ -17,4 +17,4 @@ router.post('/', async (ctx) => {
   }
 })
 
-module.exports = router
+export default router

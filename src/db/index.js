@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const colors = require('../helpers/colors')
+import mongoose from 'mongoose'
+import colors from '../helpers/colors'
 
 const connect = async () => {
   try {
@@ -15,6 +15,6 @@ const connect = async () => {
   }
 }
 
-module.exports = {
+export default {
   connect,
 }

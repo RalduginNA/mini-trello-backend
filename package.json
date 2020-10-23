@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/main.js",
-    "dev": "nodemon src/main.js",
+    "start": "node -r esm src/main.js",
+    "dev": "nodemon -r esm src/main.js",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/"
   },
   "author": "",
@@ -13,11 +13,12 @@
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "@koa/router": "^9.4.0",
-    "koa": "^2.13.0",
-    "koa-bodyparser": "^4.3.0",
     "argon2": "^0.27.0",
     "colors": "^1.4.0",
+    "esm": "^3.2.25",
     "jsonwebtoken": "^8.5.1",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
     "mongoose": "^5.10.7"
   },
   "devDependencies": {

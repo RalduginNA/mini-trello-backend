@@ -1,5 +1,5 @@
-const Router = require('@koa/router')
-const TaskModel = require('../../models/Task')
+import Router from '@koa/router'
+import TaskModel from '../../models/Task'
 
 const router = new Router({ prefix: '/tasks' })
 
@@ -29,4 +29,4 @@ router.put('/:id', async (ctx) => {
   ctx.response.body = task
 })
 
-module.exports = router
+export default router

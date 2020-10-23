@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose')
+import { Schema, model } from 'mongoose'
 const hash = require('../helpers/hash')
 
 const schema = new Schema(
@@ -32,4 +32,4 @@ schema.methods.validPassword = async function (password) {
   return await hash.verify(this.passwordHash, password)
 }
 
-module.exports = model('User', schema)
+export default model('User', schema)

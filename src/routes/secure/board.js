@@ -1,5 +1,5 @@
-const Router = require('@koa/router')
-const BoardModel = require('../../models/Board')
+import Router from '@koa/router'
+import BoardModel from '../../models/Board'
 
 const router = new Router({ prefix: '/boards' })
 
@@ -28,4 +28,4 @@ router.put('/:id', async (ctx) => {
   ctx.body = board
 })
 
-module.exports = router
+export default router

@@ -1,8 +1,8 @@
-const Router = require('@koa/router')
-const boardRouter = require('./board')
-const taskRouter = require('./task')
-const taskColumnRouter = require('./taskColumn')
-const userRouter = require('./user')
+import Router from '@koa/router'
+import boardRouter from './board'
+import taskRouter from './task'
+import taskColumnRouter from './taskColumn'
+import userRouter from './user'
 
 const secureRouter = new Router({ prefix: '/secure' })
 
@@ -24,4 +24,4 @@ secureRouter.use(async (ctx, next) => {
 
 secureRouter.use(...combinedRouter)
 
-module.exports = secureRouter
+export default secureRouter

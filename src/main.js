@@ -1,10 +1,10 @@
-const Koa = require('koa')
-const cors = require('@koa/cors')
-const bodyParser = require('koa-bodyparser')
-const db = require('./db')
-const colors = require('./helpers/colors')
-const rootRouter = require('./routes')
-require('dotenv/config')
+import Koa from 'koa'
+import cors from '@koa/cors'
+import bodyParser from 'koa-bodyparser'
+import db from './db'
+import colors from './helpers/colors'
+import rootRouter from './routes'
+import 'dotenv/config'
 
 const app = new Koa()
 
