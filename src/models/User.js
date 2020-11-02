@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose'
-const hash = require('../helpers/hash')
+import hash from '../helpers/hash'
 
 const schema = new Schema(
   {

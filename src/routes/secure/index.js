@@ -3,25 +3,25 @@ import boardRouter from './board'
 import taskRouter from './task'
 import taskColumnRouter from './taskColumn'
 import userRouter from './user'
+import jwt from '../../helpers/jwt'
+import combineRouters from '../../helpers/combineRouters'
 
 const secureRouter = new Router({ prefix: '/secure' })
 
 const routers = [boardRouter, taskRouter, taskColumnRouter, userRouter]
 
-const combinedRouter = routers.flatMap((router) => [
-  router.routes(),
-  router.allowedMethods(),
-])
+const combinedRouters = combineRouters(routers)
 
-// Need add isAuthenticated func
+// Middleware Authentication
 secureRouter.use(async (ctx, next) => {
-  console.log('secure router')
-  if (!ctx.header.authorization) {
+  try {
+    await jwt.isAuthenticated(ctx.header.authorization)
+  } catch (e) {
     ctx.throw(401)
   }
   await next()
 })
 
-secureRouter.use(...combinedRouter)
+secureRouter.use(...combinedRouters)
 
 export default secureRouter

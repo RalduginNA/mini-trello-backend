@@ -1,6 +1,6 @@
 1. Add tests
 2. Add typescript
-3. Add auth
+3. Add access and refresh token
 4. To cut the bd operation from routes and pass it to services
 5. Add error handler
 6. Add Actions table to mongodb

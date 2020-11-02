@@ -9,7 +9,6 @@ router.get('/', async (ctx) => {
 })
 
 router.get('/:id', async (ctx) => {
-  console.log('Task')
   const task = await TaskModel.findById(ctx.params.id)
   ctx.response.body = task
 })

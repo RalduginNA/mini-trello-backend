@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node -r esm src/main.js",
     "dev": "nodemon -r esm src/main.js",
-    "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/"
+    "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/",
+    "prettier-check": "prettier --check"
   },
   "author": "",
   "license": "ISC",

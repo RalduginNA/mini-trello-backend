@@ -14,8 +14,8 @@ router.get('/:id', async (ctx) => {
 })
 
 router.post('/', async (ctx) => {
-  const { name } = ctx.request.body
-  const board = new BoardModel({ name })
+  const { name, userId } = ctx.request.body
+  const board = new BoardModel({ name, userId })
   const savedBoard = await board.save()
   ctx.body = savedBoard
 })

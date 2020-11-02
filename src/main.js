@@ -14,11 +14,16 @@ app.use(rootRouter.routes())
 app.use(rootRouter.allowedMethods())
 
 async function bootstrap() {
-  const { PORT } = process.env
-  await db.connect()
-  app.listen(PORT, () => {
-    console.log(colors.info(`Server has been started on port: ${PORT}`))
-  })
+  try {
+    const { PORT } = process.env
+    await db.connect()
+    app.listen(PORT, () => {
+      console.log(colors.info(`Server has been started on port: ${PORT}`))
+    })
+  } catch (e) {
+    console.log(colors.error('Error: Server has been stopped'))
+    console.log(e)
+  }
 }
 
 bootstrap()
