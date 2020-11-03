@@ -4,6 +4,7 @@ import bodyParser from 'koa-bodyparser'
 import db from './db'
 import colors from './helpers/colors'
 import rootRouter from './routes'
+import config from './config'
 import 'dotenv/config'
 
 const app = new Koa()
@@ -15,7 +16,7 @@ app.use(rootRouter.allowedMethods())
 
 async function bootstrap() {
   try {
-    const { PORT } = process.env
+    const { PORT } = config.app
     await db.connect()
     app.listen(PORT, () => {
       console.log(colors.info(`Server has been started on port: ${PORT}`))

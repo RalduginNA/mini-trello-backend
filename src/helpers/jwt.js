@@ -1,16 +1,24 @@
 import jwt from 'jsonwebtoken'
+import config from '../config'
 
 const getToken = async ({ _id: id, name, email }) => {
-  const { PRIVATE_KEY } = process.env
-  const token = await jwt.sign({ id, name, email }, PRIVATE_KEY, {
-    algorithm: 'HS256',
+  const {
+    JWT_ALGORITHM,
+    JWT_ACCESS_TOKEN_EXPIRES_IN,
+    JWT_SECRET,
+  } = config.auth.jwt
+  const token = await jwt.sign({ id, name, email }, JWT_SECRET, {
+    algorithm: JWT_ALGORITHM,
+    expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
   })
   return token
 }
 
 const verifyToken = async (token) => {
-  const { PRIVATE_KEY } = process.env
-  const decoded = await jwt.verify(token, PRIVATE_KEY, { algorithm: 'HS256' })
+  const { JWT_SECRET, JWT_ALGORITHM } = config.auth.jwt
+  const decoded = await jwt.verify(token, JWT_SECRET, {
+    algorithm: JWT_ALGORITHM,
+  })
   return decoded
 }
 
