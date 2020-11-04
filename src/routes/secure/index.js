@@ -17,8 +17,8 @@ const combinedRouters = combineRouters(routers)
 secureRouter.use(async (ctx, next) => {
   try {
     await jwt.isAuthenticated(ctx.header.authorization)
-  } catch (e) {
-    ctx.throw(RESPONSE_CODE.REJECT.UNAUTHORIZED.code, e)
+  } catch (err) {
+    ctx.throw(RESPONSE_CODE.REJECT.UNAUTHORIZED.code, err)
   }
   await next()
 })

@@ -23,9 +23,9 @@ async function bootstrap() {
     app.listen(PORT, () => {
       console.log(colors.info(`Server has been started on port: ${PORT}`))
     })
-  } catch (e) {
+  } catch (err) {
     console.log(colors.error('Error: Server has been stopped'))
-    console.log(e)
+    console.log(err)
   }
 }
 
