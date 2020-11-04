@@ -20,9 +20,10 @@ router.post('/', async (ctx) => {
 })
 
 router.put('/:id', async (ctx) => {
-  const taskColumn = await TaskColumnModel.updateOne(
+  const taskColumn = await TaskColumnModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
+    { new: true },
   )
   ctx.response.body = taskColumn
 })

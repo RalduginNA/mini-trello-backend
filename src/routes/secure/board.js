@@ -1,5 +1,6 @@
 import Router from '@koa/router'
 import BoardModel from '../../models/Board'
+import UserModel from '../../models/User'
 
 const router = new Router({ prefix: '/boards' })
 
@@ -15,15 +16,21 @@ router.get('/:id', async (ctx) => {
 
 router.post('/', async (ctx) => {
   const { name, userId } = ctx.request.body
+  const isUserExist = await UserModel.exists({ _id: userId })
+  if (!isUserExist) {
+    ctx.throw(400, `User doesn't exist`) // try to validate ids in mongoose model
+    // throw new Error(`User doesn't exist`)
+  }
   const board = new BoardModel({ name, userId })
   const savedBoard = await board.save()
   ctx.body = savedBoard
 })
 
 router.put('/:id', async (ctx) => {
-  const board = await BoardModel.updateOne(
+  const board = await BoardModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
+    { new: true },
   )
   ctx.body = board
 })

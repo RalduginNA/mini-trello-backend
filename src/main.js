@@ -3,12 +3,14 @@ import cors from '@koa/cors'
 import bodyParser from 'koa-bodyparser'
 import db from './db'
 import colors from './helpers/colors'
+import errorHandler from './helpers/errorHandler'
 import rootRouter from './routes'
 import config from './config'
 import 'dotenv/config'
 
 const app = new Koa()
 
+app.use(errorHandler)
 app.use(bodyParser())
 app.use(cors())
 app.use(rootRouter.routes())
