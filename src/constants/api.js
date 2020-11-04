@@ -1,22 +1,22 @@
 const RESPONSE_CODE = {
   SUCCESS: {
     DEFAULT: {
-      status: 'SUCCESS',
-      code: 200,
+      status: 200,
+      code: 'SUCCESS',
     },
   },
   REJECT: {
     INVALID_REQUEST: {
-      status: 'INVALID_REQUEST',
-      code: 400,
+      status: 400,
+      code: 'INVALID_REQUEST',
     },
     UNAUTHORIZED: {
-      status: 'UNAUTHORIZED',
-      code: 401,
+      status: 401,
+      code: 'UNAUTHORIZED',
     },
     INTERNAL_SERVER_ERROR: {
-      status: 'INTERNAL_SERVER_ERROR',
-      code: 500,
+      status: 500,
+      code: 'INTERNAL_SERVER_ERROR',
     },
   },
 }
