@@ -5,6 +5,7 @@ import taskColumnRouter from './taskColumn'
 import userRouter from './user'
 import jwt from '../../helpers/jwt'
 import combineRouters from '../../helpers/combineRouters'
+import RESPONSE_CODE from '../../constants/api'
 
 const secureRouter = new Router({ prefix: '/secure' })
 
@@ -17,7 +18,7 @@ secureRouter.use(async (ctx, next) => {
   try {
     await jwt.isAuthenticated(ctx.header.authorization)
   } catch (e) {
-    ctx.throw(401)
+    ctx.throw(RESPONSE_CODE.REJECT.UNAUTHORIZED.code, e)
   }
   await next()
 })

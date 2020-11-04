@@ -23,21 +23,17 @@ const verifyToken = async (token) => {
 }
 
 const isAuthenticated = async (authorizationHeader) => {
-  try {
-    if (!authorizationHeader) {
-      throw new Error('Invalid authorization')
-    }
-    const parts = authorizationHeader.split(' ')
-    const scheme = parts[0]
-    const credentials = parts[1]
-
-    if (!/^Bearer$/i.test(scheme)) {
-      throw new Error('Invalid schema')
-    }
-    await verifyToken(credentials)
-  } catch (e) {
-    throw new Error(e.message)
+  if (!authorizationHeader) {
+    throw new Error('Invalid authorization')
   }
+  const parts = authorizationHeader.split(' ')
+  const scheme = parts[0]
+  const credentials = parts[1]
+
+  if (!/^Bearer$/i.test(scheme)) {
+    throw new Error('Invalid authorization scheme')
+  }
+  await verifyToken(credentials)
 }
 
 export default { getToken, verifyToken, isAuthenticated }
