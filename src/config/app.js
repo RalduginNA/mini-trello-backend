@@ -1,3 +1,3 @@
-const { PORT = '3001' } = process.env
+const { PORT = '4001' } = process.env
 
 export default { PORT }

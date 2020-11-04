@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
 
-const getToken = async ({ _id: id, name, email }) => {
+const getToken = async ({ _id, name, email }) => {
   const {
     JWT_ALGORITHM,
     JWT_ACCESS_TOKEN_EXPIRES_IN,
     JWT_SECRET,
   } = config.auth.jwt
-  const token = await jwt.sign({ id, name, email }, JWT_SECRET, {
+  const token = await jwt.sign({ _id, name, email }, JWT_SECRET, {
     algorithm: JWT_ALGORITHM,
     expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
   })
@@ -22,7 +22,7 @@ const verifyToken = async (token) => {
   return decoded
 }
 
-const isAuthenticated = async (authorizationHeader) => {
+const verifyAuthentication = async (authorizationHeader) => {
   if (!authorizationHeader) {
     throw new Error('Invalid authorization')
   }
@@ -33,7 +33,7 @@ const isAuthenticated = async (authorizationHeader) => {
   if (!/^Bearer$/i.test(scheme)) {
     throw new Error('Invalid authorization scheme')
   }
-  await verifyToken(credentials)
+  return await verifyToken(credentials)
 }
 
-export default { getToken, verifyToken, isAuthenticated }
+export default { getToken, verifyToken, verifyAuthentication }

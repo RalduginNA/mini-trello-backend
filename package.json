@@ -1,8 +1,7 @@
 {
   "name": "auth_service",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "node -r esm src/main.js",
     "dev": "nodemon -r esm src/main.js",
