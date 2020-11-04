@@ -6,7 +6,6 @@ import colors from './helpers/colors'
 import errorHandler from './middlewares/errorHandler'
 import rootRouter from './routes'
 import config from './config'
-import 'dotenv/config'
 
 const app = new Koa()
 

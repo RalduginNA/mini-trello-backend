@@ -4,7 +4,8 @@
   "main": "src/main.js",
   "scripts": {
     "start": "node -r esm src/main.js",
-    "dev": "nodemon -r esm src/main.js",
+    "dev": "nodemon -r esm -r dotenv/config src/main.js dotenv_config_path=.dev.env",
+    "prod": "node -r esm -r dotenv/config src/main.js dotenv_config_path=.prod.env",
     "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/",
     "prettier-check": "prettier --check"
   },
@@ -15,6 +16,7 @@
     "@koa/router": "^9.4.0",
     "argon2": "^0.27.0",
     "colors": "^1.4.0",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
@@ -22,7 +24,6 @@
     "mongoose": "^5.10.7"
   },
   "devDependencies": {
-    "dotenv": "^8.2.0",
     "eslint": "^7.2.0",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2"
