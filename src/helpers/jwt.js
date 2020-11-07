@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
+import HttpError from '../models/HttpError'
+import RESPONSE_CODE from '../constants/api'
 
 const getToken = async ({ _id, name, email }) => {
   const {
@@ -23,15 +25,16 @@ const verifyToken = async (token) => {
 }
 
 const verifyAuthentication = async (authorizationHeader) => {
+  const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.code
   if (!authorizationHeader) {
-    throw new Error('Invalid authorization')
+    throw new HttpError(UnAuthorizedCode, 'Invalid authorization')
   }
   const parts = authorizationHeader.split(' ')
   const scheme = parts[0]
   const credentials = parts[1]
 
   if (!/^Bearer$/i.test(scheme)) {
-    throw new Error('Invalid authorization scheme')
+    throw new HttpError(UnAuthorizedCode, 'Invalid authorization scheme')
   }
   return await verifyToken(credentials)
 }
