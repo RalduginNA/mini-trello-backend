@@ -1,5 +1,6 @@
 import Router from '@koa/router'
 import TaskModel from '../../models/Task'
+import TaskColumnModel from '../../models/TaskColumn'
 
 const router = new Router({ prefix: '/tasks' })
 
@@ -15,7 +16,14 @@ router.get('/:id', async (ctx) => {
 
 router.post('/', async (ctx) => {
   // NEED TO ADD { boardId, taskColumnId } VALIDATION
-  const task = new TaskModel({ ...ctx.request.body })
+  const { body } = ctx.request
+  const { _id: userId } = ctx.state.user
+  const task = new TaskModel({ ...body, userId })
+
+  const taskColumn = await TaskColumnModel.findById(body.taskColumnId)
+  taskColumn.taskIds.push(task._id)
+  await taskColumn.save()
+
   const savedTask = await task.save()
   ctx.response.body = savedTask
 })

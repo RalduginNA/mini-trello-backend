@@ -8,6 +8,7 @@ const router = new Router({ prefix: '/signIn' })
 router.post('/', async (ctx) => {
   const { email, password } = ctx.request.body
   const user = await User.findOne({ email: email })
+  // validation
   if (!user) {
     ctx.throw(401, 'User does not have an account yet')
   }

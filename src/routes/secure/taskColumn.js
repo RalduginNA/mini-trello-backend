@@ -9,7 +9,10 @@ router.get('/', async (ctx) => {
 })
 
 router.get('/:id', async (ctx) => {
-  const taskColumn = await TaskColumnModel.findById(ctx.params.id)
+  const taskColumn = await TaskColumnModel.findById(ctx.params.id).populate(
+    'tasks',
+  )
+
   ctx.response.body = taskColumn
 })
 
