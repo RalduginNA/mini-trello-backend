@@ -17,7 +17,7 @@ const schema = new Schema(
       required: [true, "can't be blank"],
       match: [/\S+@\S+\.\S+/, 'is invalid'],
     },
-    passwordHash: { type: String, required: true },
+    passwordHash: { type: String, required: true, select: false },
   },
   { timestamps: true },
 )

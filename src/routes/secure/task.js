@@ -4,25 +4,16 @@ import TaskColumnModel from '../../models/TaskColumn'
 
 const router = new Router({ prefix: '/tasks' })
 
-router.get('/', async (ctx) => {
-  const tasks = await TaskModel.find({})
-  ctx.response.body = tasks
-})
-
-router.get('/:id', async (ctx) => {
-  const task = await TaskModel.findById(ctx.params.id)
-  ctx.response.body = task
-})
-
 router.post('/', async (ctx) => {
   // NEED TO ADD { boardId, taskColumnId } VALIDATION
   const { body } = ctx.request
   const { _id: userId } = ctx.state.user
   const task = new TaskModel({ ...body, userId })
 
-  const taskColumn = await TaskColumnModel.findById(body.taskColumnId)
-  taskColumn.taskIds.push(task._id)
-  await taskColumn.save()
+  await TaskColumnModel.update(
+    { _id: body.taskColumnId },
+    { $addToSet: { tasks: task._id } },
+  )
 
   const savedTask = await task.save()
   ctx.response.body = savedTask

@@ -8,7 +8,6 @@ const schema = new Schema(
         {
           type: Schema.Types.ObjectId,
           ref: 'Task',
-          unique: true,
         },
       ],
       required: true,

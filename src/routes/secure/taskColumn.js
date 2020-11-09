@@ -4,30 +4,17 @@ import BoardModel from '../../models/Board'
 
 const router = new Router({ prefix: '/taskColumns' })
 
-router.get('/', async (ctx) => {
-  const taskColumns = await TaskColumnModel.find({})
-  ctx.response.body = taskColumns
-})
-
-router.get('/:id', async (ctx) => {
-  const taskColumn = await TaskColumnModel.findById(ctx.params.id).populate(
-    'tasks',
-  )
-
-  ctx.response.body = taskColumn
-})
-
 router.post('/', async (ctx) => {
   const { body } = ctx.request
   const taskColumn = new TaskColumnModel({ ...body })
-
+  await taskColumn.save()
   // need validation
-  const board = await BoardModel.findById(body.boardId)
-  board.taskColumns.push(taskColumn._id)
-  await board.save()
+  await BoardModel.update(
+    { _id: body.boardId },
+    { $addToSet: { taskColumns: taskColumn._id } },
+  )
 
-  const savedTaskColumn = await taskColumn.save()
-  ctx.response.body = savedTaskColumn
+  ctx.response.body = taskColumn
 })
 
 router.put('/:id', async (ctx) => {
