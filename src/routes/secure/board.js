@@ -1,6 +1,8 @@
 import Router from '@koa/router'
 import BoardModel from '../../models/Board'
+import HttpError from '../../models/HttpError'
 import UserModel from '../../models/User'
+import RESPONSE_CODE from '../../constants/api'
 
 const router = new Router({ prefix: '/boards' })
 
@@ -21,7 +23,8 @@ router.get('/:id', async (ctx) => {
 })
 
 router.post('/', async (ctx) => {
-  const { name, userId } = ctx.request.body
+  const userId = ctx.state.user._id
+  const { name } = ctx.request.body
   const isUserExist = await UserModel.exists({ _id: userId })
   // Example of validation
   if (!isUserExist) {
@@ -40,6 +43,31 @@ router.put('/:id', async (ctx) => {
     { new: true },
   )
   ctx.body = board
+})
+
+router.put('/:id/task-column-move', async (ctx) => {
+  const { id } = ctx.request.params
+  const { oldPosition, newPosition } = ctx.request.body
+
+  const board = await BoardModel.findById(id)
+  const { taskColumns } = board
+
+  if (newPosition >= taskColumns.length && oldPosition >= 0) {
+    throw HttpError(
+      RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
+      'Incorrect position',
+    )
+  }
+
+  taskColumns.splice(newPosition, 0, taskColumns.splice(oldPosition, 1)[0])
+
+  const updatedBoard = await BoardModel.findByIdAndUpdate(
+    id,
+    { $set: { taskColumns: taskColumns } },
+    { new: true },
+  )
+
+  ctx.body = { taskColumnIds: updatedBoard.taskColumns }
 })
 
 export default router

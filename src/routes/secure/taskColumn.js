@@ -6,15 +6,19 @@ const router = new Router({ prefix: '/taskColumns' })
 
 router.post('/', async (ctx) => {
   const { body } = ctx.request
-  const taskColumn = new TaskColumnModel({ ...body })
-  await taskColumn.save()
-  // need validation
-  await BoardModel.update(
-    { _id: body.boardId },
-    { $addToSet: { taskColumns: taskColumn._id } },
-  )
 
-  ctx.response.body = taskColumn
+  const taskColumn = new TaskColumnModel({ ...body })
+
+  const [savedTaskColumn] = await Promise.all([
+    await taskColumn.save(),
+    // need validation
+    await BoardModel.update(
+      { _id: body.boardId },
+      { $addToSet: { taskColumns: taskColumn._id } },
+    ),
+  ])
+
+  ctx.response.body = savedTaskColumn
 })
 
 router.put('/:id', async (ctx) => {

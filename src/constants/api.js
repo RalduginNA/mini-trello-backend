@@ -1,4 +1,4 @@
-const RESPONSE_CODE = {
+export const RESPONSE_CODE = {
   SUCCESS: {
     DEFAULT: {
       status: 200,

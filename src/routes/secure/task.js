@@ -10,12 +10,14 @@ router.post('/', async (ctx) => {
   const { _id: userId } = ctx.state.user
   const task = new TaskModel({ ...body, userId })
 
-  await TaskColumnModel.update(
-    { _id: body.taskColumnId },
-    { $addToSet: { tasks: task._id } },
-  )
+  const [savedTask] = await Promise.all([
+    task.save(),
+    TaskColumnModel.update(
+      { _id: body.taskColumnId },
+      { $addToSet: { tasks: task._id } },
+    ),
+  ])
 
-  const savedTask = await task.save()
   ctx.response.body = savedTask
 })
 

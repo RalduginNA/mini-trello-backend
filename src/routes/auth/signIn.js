@@ -2,6 +2,7 @@ import Router from '@koa/router'
 import jwt from '../../helpers/jwt'
 import User from '../../models/User'
 import hash from '../../helpers/hash'
+import RESPONSE_CODE from '../../constants/api'
 
 const router = new Router({ prefix: '/signIn' })
 
@@ -12,18 +13,23 @@ router.post('/', async (ctx) => {
   if (!user) {
     ctx.throw(401, 'User does not have an account yet')
   }
-  const isValidPassword = await hash.verify(user.passwordHash, password)
+  const { _id, username, passwordHash, createdAt, updatedAt } = user
+
+  const isValidPassword = await hash.verify(passwordHash, password)
   if (!isValidPassword) {
-    ctx.throw(401, 'Incorrect password or email')
+    ctx.throw(
+      RESPONSE_CODE.REJECT.UNAUTHORIZED.status,
+      'Incorrect password or email',
+    )
   }
   const accessToken = await jwt.getToken(user)
   ctx.body = {
-    _id: user._id,
-    username: user.username,
+    _id,
+    username,
     email: user.email,
     accessToken,
-    createdAt: user.createdAt,
-    updatedAt: user.updatedAt,
+    createdAt,
+    updatedAt,
   }
 })
 
