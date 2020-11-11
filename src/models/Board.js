@@ -1,7 +1,8 @@
 import { Schema, model } from 'mongoose'
-import validators from '../helpers/validators'
+import UserModel from './User'
 import RESPONSE_CODE from '../constants/api'
 import HttpError from './HttpError'
+import { verifyDocumentId } from '../helpers/validators/document'
 
 const schema = new Schema(
   {
@@ -22,14 +23,13 @@ const schema = new Schema(
   { timestamps: true },
 )
 
-// One example of validation
 schema.post('validate', async (doc) => {
-  const { user: UserValidator } = validators
-  const isExistUser = await UserValidator.isExist.validator(doc.userId)
-  if (!isExistUser) {
+  try {
+    await verifyDocumentId(UserModel, doc.userId)
+  } catch (err) {
     throw new HttpError(
       RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
-      UserValidator.isExist.message,
+      err.message,
     )
   }
 })

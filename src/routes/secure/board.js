@@ -1,7 +1,6 @@
 import Router from '@koa/router'
 import BoardModel from '../../models/Board'
 import HttpError from '../../models/HttpError'
-import UserModel from '../../models/User'
 import RESPONSE_CODE from '../../constants/api'
 
 const router = new Router({ prefix: '/boards' })
@@ -25,12 +24,6 @@ router.get('/:id', async (ctx) => {
 router.post('/', async (ctx) => {
   const userId = ctx.state.user._id
   const { name } = ctx.request.body
-  const isUserExist = await UserModel.exists({ _id: userId })
-  // Example of validation
-  if (!isUserExist) {
-    ctx.throw(400, `User doesn't exist`) // try to validate ids in mongoose model
-  }
-
   const board = new BoardModel({ name, userId })
   const savedBoard = await board.save()
   ctx.body = savedBoard

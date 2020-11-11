@@ -1,4 +1,8 @@
 import { Schema, model } from 'mongoose'
+import BoardModel from './Board'
+import HttpError from './HttpError'
+import RESPONSE_CODE from '../constants/api'
+import { verifyDocumentId } from '../helpers/validators/document'
 
 const schema = new Schema(
   {
@@ -17,5 +21,16 @@ const schema = new Schema(
   },
   { timestamps: true },
 )
+
+schema.post('validate', async (doc) => {
+  try {
+    await verifyDocumentId(BoardModel, doc.boardId)
+  } catch (err) {
+    throw new HttpError(
+      RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
+      err.message,
+    )
+  }
+})
 
 export default model('TaskColumn', schema)
