@@ -6,7 +6,8 @@ import RESPONSE_CODE from '../../constants/api'
 const router = new Router({ prefix: '/boards' })
 
 router.get('/', async (ctx) => {
-  const boards = await BoardModel.find({})
+  const { _id: userId } = ctx.state.user
+  const boards = await BoardModel.find({ userId })
   ctx.body = boards
 })
 
@@ -45,7 +46,7 @@ router.put('/:id/task-column-move', async (ctx) => {
   const board = await BoardModel.findById(id)
   const { taskColumns } = board
 
-  if (newPosition >= taskColumns.length && oldPosition >= 0) {
+  if (newPosition >= taskColumns.length && oldPosition >= taskColumns.length) {
     throw HttpError(
       RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
       'Incorrect position',

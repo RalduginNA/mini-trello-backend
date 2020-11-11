@@ -1,13 +1,15 @@
-1. Add tests
-2. Add typescript
-3. Add access and refresh token
-4. To cut the bd operation from routes and pass it to services or controllers
-5. Add error handler (routes, status, validation, mongoose, mongo)
-6. Add Actions table to mongodb
-7. Add koa-compose for middleware
-8. Configuration, conf file, dev, prod, test
-
+# Add tests
+# Add typescript
+# Add access and refresh token
+# To cut the bd operation from routes and pass it to services or controllers
+# Add error handler (routes, status, validation, mongoose, mongo)
+# Add Actions table to mongodb
+# Add koa-compose for middleware
+# Configuration, conf file, dev, prod, test
+# Add permission
+# Add checking permission (when try to get smth)
+---------------------------------------------
 # How past variables to process.env
 # Modeling MongoDB database
-# {Разобраться с импортами }
-# add error message constants
+# { Разобраться с импортами }
+# Add error message constants 
