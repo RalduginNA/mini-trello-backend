@@ -4,5 +4,5 @@
     ],
     "ext": ".ts,.js",
     "ignore": [],
-    "exec": "ts-node -r dotenv/config ./src/main.ts dotenv_config_path=.dev.env"
+    "exec": "NODE_ENV=production ts-node ./src/main.ts"
 }
