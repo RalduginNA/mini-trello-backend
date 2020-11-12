@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
 import HttpError from '../models/HttpError'
-import RESPONSE_CODE from '../constants/api'
+import { STATUS_CODES } from '../constants/api'
 
 interface TokenPayload {
   _id: any
@@ -26,36 +26,37 @@ const verifyToken = async (token: string) => {
     JWT_SECRET,
     JWT_SIGN_OPTIONS: { algorithm },
   } = config.auth.jwt
-  const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.status
 
   const decoded = (await jwt.verify(token, JWT_SECRET, {
     algorithms: [algorithm],
   })) as TokenPayload
 
   if (!decoded || typeof decoded !== 'object') {
-    throw new HttpError(UnAuthorizedCode, 'Invalid token payload')
+    throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid token payload')
   }
 
   const { _id, username, email } = decoded
 
   if (!_id || !username || !email) {
-    throw new HttpError(UnAuthorizedCode, 'Invalid token payload')
+    throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid token payload')
   }
 
   return decoded
 }
 
 const verifyAuthentication = async (authorizationHeader?: string) => {
-  const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.status
   if (!authorizationHeader) {
-    throw new HttpError(UnAuthorizedCode, 'Invalid authorization')
+    throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid authorization')
   }
   const parts = authorizationHeader.split(' ')
   const scheme = parts[0]
   const credentials = parts[1]
 
   if (!/^Bearer$/i.test(scheme)) {
-    throw new HttpError(UnAuthorizedCode, 'Invalid authorization scheme')
+    throw new HttpError(
+      STATUS_CODES.UNAUTHORIZED,
+      'Invalid authorization scheme',
+    )
   }
   return await verifyToken(credentials)
 }

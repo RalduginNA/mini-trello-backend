@@ -1,6 +1,6 @@
 import { Schema, model, Document, Types } from 'mongoose'
 import HttpError from './HttpError'
-import RESPONSE_CODE from '../constants/api'
+import { STATUS_CODES } from '../constants/api'
 import UserModel from './User'
 import BoardModel from './Board'
 import TaskColumnModel from './TaskColumn'
@@ -40,10 +40,7 @@ schema.post('validate', async (doc: TaskDoc) => {
       [TaskColumnModel, taskColumnId],
     ])
   } catch (err) {
-    throw new HttpError(
-      RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
-      err.message,
-    )
+    throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
   }
 })
 

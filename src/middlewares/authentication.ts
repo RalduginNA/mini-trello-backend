@@ -1,6 +1,6 @@
 import { Middleware } from 'koa'
 import jwt from '../helpers/jwt'
-import RESPONSE_CODE from '../constants/api'
+import { STATUS_CODES } from '../constants/api'
 
 const authentication: Middleware = async (ctx, next) => {
   try {
@@ -9,7 +9,7 @@ const authentication: Middleware = async (ctx, next) => {
     )
     ctx.state.user = { _id, username, email }
   } catch (err) {
-    ctx.throw(RESPONSE_CODE.REJECT.UNAUTHORIZED.code, err)
+    ctx.throw(STATUS_CODES.UNAUTHORIZED, err)
   }
   await next()
 }

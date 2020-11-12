@@ -1,15 +1,12 @@
 # Add tests
-# Add typescript
+# Add types for routes
+# Add Classes for mongoose scheme
 # Add access and refresh token
 # To cut the bd operation from routes and pass it to services or controllers
-# Add error handler (routes, status, validation, mongoose, mongo)
-# Add Actions table to mongodb
-# Add koa-compose for middleware
-# Configuration, conf file, dev, prod, test
+# Add Actions table to mongo db
 # Add permission
 # Add checking permission (when try to get smth)
+# Add error message constants 
 ---------------------------------------------
-# How past variables to process.env
 # Modeling MongoDB database
 # { Разобраться с импортами }
-# Add error message constants 

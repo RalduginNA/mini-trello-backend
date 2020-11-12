@@ -1,7 +1,7 @@
 import Router from '@koa/router'
 import BoardModel from '../../models/Board'
 import HttpError from '../../models/HttpError'
-import RESPONSE_CODE from '../../constants/api'
+import { STATUS_CODES } from '../../constants/api'
 
 const router = new Router({ prefix: '/boards' })
 
@@ -47,10 +47,7 @@ router.put('/:id/task-column-move', async (ctx) => {
   const { taskColumns } = board
 
   if (newPosition >= taskColumns.length && oldPosition >= taskColumns.length) {
-    throw new HttpError(
-      RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
-      'Incorrect position',
-    )
+    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
   }
 
   taskColumns.splice(newPosition, 0, taskColumns.splice(oldPosition, 1)[0])

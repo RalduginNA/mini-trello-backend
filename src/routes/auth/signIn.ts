@@ -2,7 +2,7 @@ import Router from '@koa/router'
 import jwt from '../../helpers/jwt'
 import User from '../../models/User'
 import hash from '../../helpers/hash'
-import RESPONSE_CODE from '../../constants/api'
+import { STATUS_CODES } from '../../constants/api'
 
 const router = new Router({ prefix: '/signIn' })
 
@@ -17,10 +17,7 @@ router.post('/', async (ctx) => {
 
   const isValidPassword = await hash.verify(passwordHash, password)
   if (!isValidPassword) {
-    ctx.throw(
-      RESPONSE_CODE.REJECT.UNAUTHORIZED.status,
-      'Incorrect password or email',
-    )
+    ctx.throw(STATUS_CODES.UNAUTHORIZED, 'Incorrect password or email')
   }
   const accessToken = await jwt.getToken(user)
   ctx.body = {

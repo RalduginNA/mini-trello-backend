@@ -1,6 +1,6 @@
 import { Schema, model, Types, Document } from 'mongoose'
 import UserModel from './User'
-import RESPONSE_CODE from '../constants/api'
+import { STATUS_CODES } from '../constants/api'
 import HttpError from './HttpError'
 import { verifyDocumentId } from '../helpers/validators/document'
 
@@ -35,10 +35,7 @@ schema.post('validate', async (doc: BoardDoc) => {
   try {
     await verifyDocumentId(UserModel, doc.userId)
   } catch (err) {
-    throw new HttpError(
-      RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
-      err.message,
-    )
+    throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
   }
 })
 

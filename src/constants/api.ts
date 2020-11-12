@@ -1,24 +1,13 @@
-export const RESPONSE_CODE = {
-  SUCCESS: {
-    DEFAULT: {
-      status: 200,
-      code: 'SUCCESS',
-    },
-  },
-  REJECT: {
-    INVALID_REQUEST: {
-      status: 400,
-      code: 'INVALID_REQUEST',
-    },
-    UNAUTHORIZED: {
-      status: 401,
-      code: 'UNAUTHORIZED',
-    },
-    INTERNAL_SERVER_ERROR: {
-      status: 500,
-      code: 'INTERNAL_SERVER_ERROR',
-    },
-  },
+export enum STATUS_CODES {
+  OK = 200,
+  BAD_REQUEST = 400,
+  UNAUTHORIZED = 401,
+  INTERNAL_SERVER_ERROR = 500,
 }
 
-export default RESPONSE_CODE
+export enum REASON_PHRASES {
+  OK = 'OK',
+  BAD_REQUEST = 'Bad Request',
+  UNAUTHORIZED = 'Unauthorized',
+  INTERNAL_SERVER_ERROR = 'Internal Server Error',
+}
