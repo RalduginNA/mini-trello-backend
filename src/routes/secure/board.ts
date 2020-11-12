@@ -40,14 +40,14 @@ router.put('/:id', async (ctx) => {
 })
 
 router.put('/:id/task-column-move', async (ctx) => {
-  const { id } = ctx.request.params
+  const { id } = ctx.params
   const { oldPosition, newPosition } = ctx.request.body
 
   const board = await BoardModel.findById(id)
   const { taskColumns } = board
 
   if (newPosition >= taskColumns.length && oldPosition >= taskColumns.length) {
-    throw HttpError(
+    throw new HttpError(
       RESPONSE_CODE.REJECT.INVALID_REQUEST.status,
       'Incorrect position',
     )

@@ -1,8 +1,16 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Types, Document } from 'mongoose'
 import UserModel from './User'
 import RESPONSE_CODE from '../constants/api'
 import HttpError from './HttpError'
 import { verifyDocumentId } from '../helpers/validators/document'
+
+export interface Board {
+  name: string
+  userId: Types.ObjectId
+  taskColumns: Array<Types.ObjectId>
+}
+
+interface BoardDoc extends Board, Document {}
 
 const schema = new Schema(
   {
@@ -23,7 +31,7 @@ const schema = new Schema(
   { timestamps: true },
 )
 
-schema.post('validate', async (doc) => {
+schema.post('validate', async (doc: BoardDoc) => {
   try {
     await verifyDocumentId(UserModel, doc.userId)
   } catch (err) {
@@ -34,4 +42,4 @@ schema.post('validate', async (doc) => {
   }
 })
 
-export default model('Board', schema)
+export default model<BoardDoc>('Board', schema)

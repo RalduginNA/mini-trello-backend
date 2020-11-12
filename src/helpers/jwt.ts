@@ -3,37 +3,50 @@ import config from '../config'
 import HttpError from '../models/HttpError'
 import RESPONSE_CODE from '../constants/api'
 
-const getToken = async ({
-  _id,
-  name,
-  email,
-}: {
-  _id: string
-  name: string
+interface TokenPayload {
+  _id: any
+  username: string
   email: string
-}) => {
+}
+
+const getToken = async ({ _id, username, email }: TokenPayload) => {
   const {
-    JWT_ALGORITHM,
-    JWT_ACCESS_TOKEN_EXPIRES_IN,
     JWT_SECRET,
+    JWT_SIGN_OPTIONS: { algorithm, expiresIn },
   } = config.auth.jwt
-  const token = await jwt.sign({ _id, name, email }, JWT_SECRET, {
-    algorithm: JWT_ALGORITHM,
-    expiresIn: JWT_ACCESS_TOKEN_EXPIRES_IN,
+  const token = await jwt.sign({ _id, username, email }, JWT_SECRET, {
+    algorithm: algorithm,
+    expiresIn,
   })
   return token
 }
 
 const verifyToken = async (token: string) => {
-  const { JWT_SECRET, JWT_ALGORITHM } = config.auth.jwt
-  const decoded = await jwt.verify(token, JWT_SECRET, {
-    algorithm: JWT_ALGORITHM,
-  })
+  const {
+    JWT_SECRET,
+    JWT_SIGN_OPTIONS: { algorithm },
+  } = config.auth.jwt
+  const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.status
+
+  const decoded = (await jwt.verify(token, JWT_SECRET, {
+    algorithms: [algorithm],
+  })) as TokenPayload
+
+  if (!decoded || typeof decoded !== 'object') {
+    throw new HttpError(UnAuthorizedCode, 'Invalid token payload')
+  }
+
+  const { _id, username, email } = decoded
+
+  if (!_id || !username || !email) {
+    throw new HttpError(UnAuthorizedCode, 'Invalid token payload')
+  }
+
   return decoded
 }
 
 const verifyAuthentication = async (authorizationHeader?: string) => {
-  const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.code
+  const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.status
   if (!authorizationHeader) {
     throw new HttpError(UnAuthorizedCode, 'Invalid authorization')
   }

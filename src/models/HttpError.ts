@@ -1,6 +1,6 @@
 class HttpError extends Error {
-  status: string
-  constructor(statusCode: string, message: string) {
+  status: number
+  constructor(statusCode: number, message: string) {
     super(message)
     this.status = statusCode
   }

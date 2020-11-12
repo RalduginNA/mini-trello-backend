@@ -1,4 +1,10 @@
-export const verifyDocumentId = async (model, id, errMsg) => {
+import { Model } from 'mongoose'
+
+export const verifyDocumentId = async (
+  model: Model<any>,
+  id: any,
+  errMsg?: string,
+) => {
   const document = await model.findById(id)
   if (!document) {
     throw new Error(
@@ -8,8 +14,10 @@ export const verifyDocumentId = async (model, id, errMsg) => {
   }
 }
 
-export const verifyDocumentIds = async (arr) => {
-  return Promise.all(
+export const verifyDocumentIds = async (
+  arr: Array<[model: Model<any>, id: any, errMsg?: string]>,
+) => {
+  Promise.all(
     arr.map(([model, id, errMsg]) => verifyDocumentId(model, id, errMsg)),
   )
 }

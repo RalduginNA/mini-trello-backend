@@ -1,5 +1,16 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import hash from '../helpers/hash'
+import { Timestamp } from '../types'
+
+export interface User extends Timestamp {
+  username: string
+  email: string
+  passwordHash: string
+  setPassword: (password: string) => void
+  validPassword: (password: string) => Promise<boolean>
+}
+
+interface UserDoc extends User, Document {}
 
 const schema = new Schema(
   {
@@ -22,12 +33,12 @@ const schema = new Schema(
   { timestamps: true },
 )
 
-schema.methods.setPassword = async function (password) {
+schema.methods.setPassword = async function (password: string) {
   this.passwordHash = await hash.get(password)
 }
 
-schema.methods.validPassword = async function (password) {
+schema.methods.validPassword = async function (password: string) {
   return await hash.verify(this.passwordHash, password)
 }
 
-export default model('User', schema)
+export default model<UserDoc>('User', schema)
