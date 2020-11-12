@@ -9,6 +9,7 @@ router.post('/', async (ctx) => {
   const { body } = ctx.request
   const { _id: userId } = ctx.state.user
   const task = new TaskModel({ ...body, userId })
+  await task.validate()
 
   const [savedTask] = await Promise.all([
     task.save(),

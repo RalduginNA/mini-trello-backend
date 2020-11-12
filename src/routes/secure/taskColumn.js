@@ -6,8 +6,8 @@ const router = new Router({ prefix: '/taskColumns' })
 
 router.post('/', async (ctx) => {
   const { body } = ctx.request
-
   const taskColumn = new TaskColumnModel({ ...body })
+  await taskColumn.validate()
 
   const [savedTaskColumn] = await Promise.all([
     await taskColumn.save(),

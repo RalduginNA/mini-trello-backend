@@ -3,7 +3,15 @@ import config from '../config'
 import HttpError from '../models/HttpError'
 import RESPONSE_CODE from '../constants/api'
 
-const getToken = async ({ _id, name, email }) => {
+const getToken = async ({
+  _id,
+  name,
+  email,
+}: {
+  _id: string
+  name: string
+  email: string
+}) => {
   const {
     JWT_ALGORITHM,
     JWT_ACCESS_TOKEN_EXPIRES_IN,
@@ -16,7 +24,7 @@ const getToken = async ({ _id, name, email }) => {
   return token
 }
 
-const verifyToken = async (token) => {
+const verifyToken = async (token: string) => {
   const { JWT_SECRET, JWT_ALGORITHM } = config.auth.jwt
   const decoded = await jwt.verify(token, JWT_SECRET, {
     algorithm: JWT_ALGORITHM,
@@ -24,7 +32,7 @@ const verifyToken = async (token) => {
   return decoded
 }
 
-const verifyAuthentication = async (authorizationHeader) => {
+const verifyAuthentication = async (authorizationHeader?: string) => {
   const UnAuthorizedCode = RESPONSE_CODE.REJECT.UNAUTHORIZED.code
   if (!authorizationHeader) {
     throw new HttpError(UnAuthorizedCode, 'Invalid authorization')

@@ -1,7 +1,8 @@
+import { Middleware } from 'koa'
 import jwt from '../helpers/jwt'
 import RESPONSE_CODE from '../constants/api'
 
-const authentication = async (ctx, next) => {
+const authentication: Middleware = async (ctx, next) => {
   try {
     const { _id, username, email } = await jwt.verifyAuthentication(
       ctx.header.authorization,

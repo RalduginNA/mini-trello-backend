@@ -1,6 +1,7 @@
+import { Middleware } from 'koa'
 import RESPONSE_CODE from '../constants/api'
 
-const errorHandler = async (ctx, next) => {
+const errorHandler: Middleware = async (ctx, next) => {
   try {
     await next()
   } catch (err) {
