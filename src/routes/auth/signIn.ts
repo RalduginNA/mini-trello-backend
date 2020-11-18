@@ -6,8 +6,13 @@ import { STATUS_CODES } from '../../constants/api'
 
 const router = new Router({ prefix: '/signIn' })
 
+interface SignInRequest {
+  email: string
+  password: string
+}
+
 router.post('/', async (ctx) => {
-  const { email, password } = ctx.request.body
+  const { email, password } = <SignInRequest>ctx.request.body
   const user = await User.findOne({ email: email })
   // validation
   if (!user) {

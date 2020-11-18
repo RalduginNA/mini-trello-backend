@@ -1,4 +1,5 @@
 # Add tests
+# Improve types
 # Add types for routes
 # Add Classes for mongoose scheme
 # Add access and refresh token

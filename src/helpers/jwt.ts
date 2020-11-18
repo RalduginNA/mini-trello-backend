@@ -3,7 +3,7 @@ import config from '../config'
 import HttpError from '../models/HttpError'
 import { STATUS_CODES } from '../constants/api'
 
-interface TokenPayload {
+export interface TokenPayload {
   _id: any
   username: string
   email: string
