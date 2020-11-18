@@ -2,9 +2,10 @@ import jwt from 'jsonwebtoken'
 import config from '../config'
 import HttpError from '../models/HttpError'
 import { STATUS_CODES } from '../constants/api'
+import { Types } from 'mongoose'
 
 export interface TokenPayload {
-  _id: any
+  _id: Types.ObjectId
   username: string
   email: string
 }

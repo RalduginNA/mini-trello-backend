@@ -1,17 +1,18 @@
 import Router from '@koa/router'
-import BoardModel from '../../models/Board'
+import BoardModel, { Board } from '../../models/Board'
 import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
+import { Ctx, ParamsId } from '../../types'
 
 const router = new Router({ prefix: '/boards' })
 
-router.get('/', async (ctx) => {
+router.get('/', async (ctx: Ctx<{}, ParamsId>) => {
   const { _id: userId } = ctx.state.user
   const boards = await BoardModel.find({ userId })
   ctx.body = boards
 })
 
-router.get('/:id', async (ctx) => {
+router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const board = await BoardModel.findById(ctx.params.id).populate({
     path: 'taskColumns',
     populate: {
@@ -22,7 +23,9 @@ router.get('/:id', async (ctx) => {
   ctx.body = board
 })
 
-router.post('/', async (ctx) => {
+interface BoardCreateRequest extends Board {}
+
+router.post('/', async (ctx: Ctx<BoardCreateRequest>) => {
   const userId = ctx.state.user._id
   const { name } = ctx.request.body
   const board = new BoardModel({ name, userId })
@@ -30,7 +33,7 @@ router.post('/', async (ctx) => {
   ctx.body = savedBoard
 })
 
-router.put('/:id', async (ctx) => {
+router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const board = await BoardModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -39,26 +42,37 @@ router.put('/:id', async (ctx) => {
   ctx.body = board
 })
 
-router.put('/:id/task-column-move', async (ctx) => {
-  const { id } = ctx.params
-  const { oldPosition, newPosition } = ctx.request.body
+interface TaskColumnMoveRequest {
+  oldPosition: number
+  newPosition: number
+}
 
-  const board = await BoardModel.findById(id)
-  const { taskColumns } = board
+router.put(
+  '/:id/task-column-move',
+  async (ctx: Ctx<TaskColumnMoveRequest, ParamsId>) => {
+    const { id } = ctx.params
+    const { oldPosition, newPosition } = ctx.request.body
 
-  if (newPosition >= taskColumns.length && oldPosition >= taskColumns.length) {
-    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
-  }
+    const board = await BoardModel.findById(id)
+    const { taskColumns } = board
 
-  taskColumns.splice(newPosition, 0, taskColumns.splice(oldPosition, 1)[0])
+    if (
+      newPosition >= taskColumns.length &&
+      oldPosition >= taskColumns.length
+    ) {
+      throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
+    }
 
-  const updatedBoard = await BoardModel.findByIdAndUpdate(
-    id,
-    { $set: { taskColumns: taskColumns } },
-    { new: true },
-  )
+    taskColumns.splice(newPosition, 0, taskColumns.splice(oldPosition, 1)[0])
 
-  ctx.body = { taskColumnIds: updatedBoard.taskColumns }
-})
+    const updatedBoard = await BoardModel.findByIdAndUpdate(
+      id,
+      { $set: { taskColumns: taskColumns } },
+      { new: true },
+    )
+
+    ctx.body = { taskColumnIds: updatedBoard.taskColumns }
+  },
+)
 
 export default router

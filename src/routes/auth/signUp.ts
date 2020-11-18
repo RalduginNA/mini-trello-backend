@@ -1,6 +1,7 @@
 import Router from '@koa/router'
 import jwt from '../../helpers/jwt'
 import UserModel from '../../models/User'
+import { Ctx } from '../../types'
 
 const router = new Router({ prefix: '/signUp' })
 
@@ -10,8 +11,8 @@ interface SignUpRequest {
   password: string
 }
 
-router.post('/', async (ctx) => {
-  const { username, email, password } = <SignUpRequest>ctx.request.body
+router.post('/', async (ctx: Ctx<SignUpRequest>) => {
+  const { username, email, password } = ctx.request.body
   const user = new UserModel({ username, email })
   await user.setPassword(password)
   const savedUser = await user.save()

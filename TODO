@@ -1,4 +1,5 @@
 # Add tests
+# Replace _id to id and remove __v
 # Improve types
 # Add types for routes
 # Add Classes for mongoose scheme

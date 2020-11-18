@@ -1,10 +1,14 @@
 import Router from '@koa/router'
-import TaskModel from '../../models/Task'
+import { verifyDocumentId } from '../../helpers/validators/document'
+import TaskModel, { Task } from '../../models/Task'
 import TaskColumnModel from '../../models/TaskColumn'
+import { Ctx, ParamsId } from '../../types'
 
 const router = new Router({ prefix: '/tasks' })
 
-router.post('/', async (ctx) => {
+interface CreateTaskRequest extends Task {}
+
+router.post('/', async (ctx: Ctx<CreateTaskRequest>) => {
   const { body } = ctx.request
   const { _id: userId } = ctx.state.user
   const task = new TaskModel({ ...body, userId })
@@ -13,7 +17,7 @@ router.post('/', async (ctx) => {
   const [savedTask] = await Promise.all([
     task.save(),
     TaskColumnModel.update(
-      { _id: body.taskColumnId },
+      { _id: task.taskColumnId },
       { $addToSet: { tasks: task._id } },
     ),
   ])
@@ -21,7 +25,7 @@ router.post('/', async (ctx) => {
   ctx.response.body = savedTask
 })
 
-router.put('/:id', async (ctx) => {
+router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const task = await TaskModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -30,27 +34,37 @@ router.put('/:id', async (ctx) => {
   ctx.response.body = task
 })
 
-router.put('/:id/change-task-column', async (ctx) => {
-  const { id } = ctx.params
-  const { newTaskColumnId, taskPosition = 0 } = ctx.request.body
+interface ChangeTaskColumn {
+  newTaskColumnId: string
+  taskPosition?: number
+}
 
-  const task = await TaskModel.findById(id)
+router.put(
+  '/:id/change-task-column',
+  async (ctx: Ctx<ChangeTaskColumn, ParamsId>) => {
+    const { id } = ctx.params
+    const { newTaskColumnId, taskPosition = 0 } = ctx.request.body
 
-  await TaskColumnModel.update(
-    { _id: task.taskColumnId },
-    { $pull: { tasks: id } },
-    { safe: true, multi: true },
-  )
+    await verifyDocumentId(TaskColumnModel, newTaskColumnId)
 
-  await TaskColumnModel.update(
-    { _id: newTaskColumnId },
-    { $push: { tasks: { $each: [id], $position: taskPosition } } },
-    { safe: true, multi: true },
-  )
+    const task = await TaskModel.findById(id)
 
-  await task.updateOne({ $set: { taskColumnId: newTaskColumnId } })
+    await TaskColumnModel.update(
+      { _id: task.taskColumnId },
+      { $pull: { tasks: id } },
+      { safe: true, multi: true },
+    )
 
-  ctx.response.body = 'done'
-})
+    await TaskColumnModel.update(
+      { _id: newTaskColumnId },
+      { $push: { tasks: { $each: [id], $position: taskPosition } } },
+      { safe: true, multi: true },
+    )
+
+    await task.updateOne({ $set: { taskColumnId: newTaskColumnId } })
+
+    ctx.response.body = 'done'
+  },
+)
 
 export default router

@@ -1,3 +1,6 @@
+import { Request, ParameterizedContext } from 'koa'
+import { RouterParamContext } from '@koa/router'
+import { Types } from 'mongoose'
 import { TokenPayload } from './helpers/jwt'
 
 export interface Timestamp {
@@ -10,3 +13,17 @@ export interface CtxState {
 }
 
 export type Environment = 'development' | 'production'
+
+interface CtxRequest<T> extends Request {
+  body?: T
+}
+
+export interface Ctx<BodyT = {}, ParamsT = any, StateT = CtxState>
+  extends ParameterizedContext<StateT, RouterParamContext<StateT, {}>> {
+  request: CtxRequest<BodyT>
+  params: ParamsT
+}
+
+export interface ParamsId {
+  id: Types.ObjectId
+}

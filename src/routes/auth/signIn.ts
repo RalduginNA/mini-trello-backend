@@ -3,6 +3,7 @@ import jwt from '../../helpers/jwt'
 import User from '../../models/User'
 import hash from '../../helpers/hash'
 import { STATUS_CODES } from '../../constants/api'
+import { Ctx } from '../../types'
 
 const router = new Router({ prefix: '/signIn' })
 
@@ -11,8 +12,8 @@ interface SignInRequest {
   password: string
 }
 
-router.post('/', async (ctx) => {
-  const { email, password } = <SignInRequest>ctx.request.body
+router.post('/', async (ctx: Ctx<SignInRequest>) => {
+  const { email, password } = ctx.request.body
   const user = await User.findOne({ email: email })
   // validation
   if (!user) {

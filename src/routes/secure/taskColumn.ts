@@ -1,19 +1,21 @@
 import Router from '@koa/router'
-import TaskColumnModel from '../../models/TaskColumn'
+import TaskColumnModel, { TaskColum } from '../../models/TaskColumn'
 import BoardModel from '../../models/Board'
 import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
+import { Ctx, ParamsId } from '../../types'
 
 const router = new Router({ prefix: '/taskColumns' })
 
-router.post('/', async (ctx) => {
+interface CreateTaskColumnRequest extends TaskColum {}
+
+router.post('/', async (ctx: Ctx<CreateTaskColumnRequest>) => {
   const { body } = ctx.request
   const taskColumn = new TaskColumnModel({ ...body })
   await taskColumn.validate()
 
   const [savedTaskColumn] = await Promise.all([
     await taskColumn.save(),
-    // need validation
     await BoardModel.update(
       { _id: body.boardId },
       { $addToSet: { taskColumns: taskColumn._id } },
@@ -23,7 +25,7 @@ router.post('/', async (ctx) => {
   ctx.response.body = savedTaskColumn
 })
 
-router.put('/:id', async (ctx) => {
+router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const taskColumn = await TaskColumnModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -32,7 +34,12 @@ router.put('/:id', async (ctx) => {
   ctx.response.body = taskColumn
 })
 
-router.put('/:id/task-order', async (ctx) => {
+interface TaskOrderRequest {
+  oldPosition: number
+  newPosition: number
+}
+
+router.put('/:id/task-order', async (ctx: Ctx<TaskOrderRequest, ParamsId>) => {
   const { id } = ctx.params
   const { oldPosition, newPosition } = ctx.request.body
 
