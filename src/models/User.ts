@@ -1,4 +1,4 @@
-import { Schema, model, Model, Document } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import hash from '../helpers/hash'
 import { Timestamp } from '../types'
 
@@ -11,7 +11,6 @@ export interface User extends Timestamp {
 }
 
 interface UserDoc extends User, Document {}
-interface UserModel extends Model<UserDoc> {}
 
 const schema = new Schema(
   {
@@ -42,4 +41,4 @@ schema.methods.validPassword = async function (password: string) {
   return await hash.verify(this.passwordHash, password)
 }
 
-export default model<UserDoc, UserModel>('User', schema)
+export default model<UserDoc>('User', schema)

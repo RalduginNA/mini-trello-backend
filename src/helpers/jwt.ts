@@ -10,26 +10,49 @@ export interface TokenPayload {
   email: string
 }
 
-const getToken = async ({ _id, username, email }: TokenPayload) => {
-  const {
-    JWT_SECRET,
-    JWT_SIGN_OPTIONS: { algorithm, expiresIn },
-  } = config.auth.jwt
-  const token = await jwt.sign({ _id, username, email }, JWT_SECRET, {
-    algorithm: algorithm,
+export interface SignTokenParams extends TokenPayload {
+  opt: { secret: string; expiresIn?: string }
+}
+
+const signToken = async ({ _id, username, email, opt }: SignTokenParams) => {
+  const { secret, expiresIn } = opt
+  const { JWT_ALGORITHM } = config.auth.jwt
+  const token = await jwt.sign({ _id, username, email }, secret, {
+    algorithm: JWT_ALGORITHM,
     expiresIn,
   })
   return token
 }
 
-const verifyToken = async (token: string) => {
-  const {
-    JWT_SECRET,
-    JWT_SIGN_OPTIONS: { algorithm },
-  } = config.auth.jwt
+const signAccessToken = async (payload: TokenPayload) => {
+  const { JWT_SECRET, JWT_TOKEN_EXPIRES_IN } = config.auth.jwt
+  const accessToken = await signToken({
+    ...payload,
+    opt: {
+      secret: JWT_SECRET,
+      expiresIn: JWT_TOKEN_EXPIRES_IN,
+    },
+  })
+  return accessToken
+}
 
-  const decoded = (await jwt.verify(token, JWT_SECRET, {
-    algorithms: [algorithm],
+const signRefreshToken = async (payload: TokenPayload) => {
+  const { JWT_REFRESH_SECRET, JWT_REFRESH_TOKEN_EXPIRES_IN } = config.auth.jwt
+  const accessToken = await signToken({
+    ...payload,
+    opt: {
+      secret: JWT_REFRESH_SECRET,
+      expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN,
+    },
+  })
+  return accessToken
+}
+
+const verifyToken = async (token: string, refresh?: boolean) => {
+  const { JWT_SECRET, JWT_REFRESH_SECRET, JWT_ALGORITHM } = config.auth.jwt
+  const secret = !refresh ? JWT_SECRET : JWT_REFRESH_SECRET
+  const decoded = (await jwt.verify(token, secret, {
+    algorithms: [JWT_ALGORITHM],
   })) as TokenPayload
 
   if (!decoded || typeof decoded !== 'object') {
@@ -62,4 +85,9 @@ const verifyAuthentication = async (authorizationHeader?: string) => {
   return await verifyToken(credentials)
 }
 
-export default { getToken, verifyToken, verifyAuthentication }
+export default {
+  signAccessToken,
+  signRefreshToken,
+  verifyToken,
+  verifyAuthentication,
+}

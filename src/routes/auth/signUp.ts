@@ -1,6 +1,7 @@
 import Router from '@koa/router'
 import jwt from '../../helpers/jwt'
 import UserModel from '../../models/User'
+import RefreshSessionModel from '../../models/RefreshSession'
 import { Ctx } from '../../types'
 
 const router = new Router({ prefix: '/signUp' })
@@ -16,12 +17,23 @@ router.post('/', async (ctx: Ctx<SignUpRequest>) => {
   const user = new UserModel({ username, email })
   await user.setPassword(password)
   const savedUser = await user.save()
-  const accessToken = await jwt.getToken(savedUser)
+  const [accessToken, refreshToken] = await Promise.all([
+    jwt.signAccessToken(savedUser.toObject()),
+    jwt.signRefreshToken(savedUser.toObject()),
+  ])
+
+  const refreshSession = new RefreshSessionModel({
+    user: savedUser.id,
+    refreshToken: refreshToken,
+  })
+  const savedRefreshSession = await refreshSession.save()
+
   ctx.body = {
-    _id: savedUser._id,
+    id: savedUser._id,
     username: savedUser.username,
     email: savedUser.email,
     accessToken,
+    refreshToken: savedRefreshSession.refreshToken,
     createdAt: savedUser.createdAt,
     updatedAt: savedUser.updatedAt,
   }

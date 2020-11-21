@@ -4,6 +4,7 @@ import User from '../../models/User'
 import hash from '../../helpers/hash'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx } from '../../types'
+import RefreshSessionModel from '../../models/RefreshSession'
 
 const router = new Router({ prefix: '/signIn' })
 
@@ -15,22 +16,33 @@ interface SignInRequest {
 router.post('/', async (ctx: Ctx<SignInRequest>) => {
   const { email, password } = ctx.request.body
   const user = await User.findOne({ email: email })
-  // validation
   if (!user) {
-    ctx.throw(401, 'User does not have an account yet')
+    ctx.throw(STATUS_CODES.UNAUTHORIZED, 'User does not have an account yet')
   }
+
   const { _id, username, passwordHash, createdAt, updatedAt } = user
 
   const isValidPassword = await hash.verify(passwordHash, password)
   if (!isValidPassword) {
     ctx.throw(STATUS_CODES.UNAUTHORIZED, 'Incorrect password or email')
   }
-  const accessToken = await jwt.getToken(user)
+  const [accessToken, refreshToken] = await Promise.all([
+    jwt.signAccessToken({ _id, username, email }),
+    jwt.signRefreshToken({ _id, username, email }),
+  ])
+
+  const refreshSession = new RefreshSessionModel({
+    user: _id,
+    refreshToken: refreshToken,
+  })
+  const savedRefreshSession = await refreshSession.save()
+
   ctx.body = {
-    _id,
+    id: _id,
     username,
     email: user.email,
     accessToken,
+    refreshToken: savedRefreshSession.refreshToken,
     createdAt,
     updatedAt,
   }

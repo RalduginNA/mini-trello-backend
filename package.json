@@ -4,7 +4,7 @@
   "main": "src/main.js",
   "scripts": {
     "dev": "nodemon",
-    "lint": "eslint \"**/*.js\" --ignore-pattern node_modules/",
+    "lint": "eslint \"**/*.ts\" --ignore-pattern node_modules/",
     "prettier-check": "prettier --check"
   },
   "author": "",
@@ -29,7 +29,11 @@
     "@types/koa-bodyparser": "^4.3.0",
     "@types/mongoose": "^5.10.0",
     "@types/node": "^14.14.7",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
     "eslint": "^7.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-security": "^1.4.0",
     "nodemon": "^2.0.4",
     "prettier": "^2.1.2",
     "ts-node": "^9.0.0",

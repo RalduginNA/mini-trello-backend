@@ -1,8 +1,8 @@
-import { Model } from 'mongoose'
+import { Model, Types, Document } from 'mongoose'
 
 export const verifyDocumentId = async (
-  model: Model<any>,
-  id: any,
+  model: Model<Document>,
+  id: Types.ObjectId | string,
   errMsg?: string,
 ) => {
   const document = await model.findById(id)
@@ -15,7 +15,9 @@ export const verifyDocumentId = async (
 }
 
 export const verifyDocumentIds = async (
-  arr: Array<[model: Model<any>, id: any, errMsg?: string]>,
+  arr: Array<
+    [model: Model<Document>, id: Types.ObjectId | string, errMsg?: string]
+  >,
 ) => {
   Promise.all(
     arr.map(([model, id, errMsg]) => verifyDocumentId(model, id, errMsg)),

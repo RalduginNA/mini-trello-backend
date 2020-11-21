@@ -25,7 +25,12 @@ router.post('/', async (ctx: Ctx<CreateTaskRequest>) => {
   ctx.response.body = savedTask
 })
 
-router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
+interface UpdateTaskRequest {
+  title?: string
+  description?: string
+}
+
+router.put('/:id', async (ctx: Ctx<UpdateTaskRequest, ParamsId>) => {
   const task = await TaskModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -48,7 +53,7 @@ router.put(
     await verifyDocumentId(TaskColumnModel, newTaskColumnId)
 
     const task = await TaskModel.findById(id)
-
+    // Promise all ?
     await TaskColumnModel.update(
       { _id: task.taskColumnId },
       { $pull: { tasks: id } },

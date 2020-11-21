@@ -4,12 +4,13 @@ import BoardModel from '../../models/Board'
 import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
+import { Types } from 'mongoose'
 
 const router = new Router({ prefix: '/taskColumns' })
 
-interface CreateTaskColumnRequest extends TaskColum {}
+interface CreateTaskColumn extends TaskColum {}
 
-router.post('/', async (ctx: Ctx<CreateTaskColumnRequest>) => {
+router.post('/', async (ctx: Ctx<CreateTaskColumn>) => {
   const { body } = ctx.request
   const taskColumn = new TaskColumnModel({ ...body })
   await taskColumn.validate()
@@ -25,7 +26,12 @@ router.post('/', async (ctx: Ctx<CreateTaskColumnRequest>) => {
   ctx.response.body = savedTaskColumn
 })
 
-router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
+interface UpdateTaskOrderRequest {
+  name: string
+  boardId: Types.ObjectId
+}
+
+router.put('/:id', async (ctx: Ctx<UpdateTaskOrderRequest, ParamsId>) => {
   const taskColumn = await TaskColumnModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },

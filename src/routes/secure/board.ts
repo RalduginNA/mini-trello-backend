@@ -23,9 +23,9 @@ router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   ctx.body = board
 })
 
-interface BoardCreateRequest extends Board {}
+interface CreateBoardRequest extends Board {}
 
-router.post('/', async (ctx: Ctx<BoardCreateRequest>) => {
+router.post('/', async (ctx: Ctx<CreateBoardRequest>) => {
   const userId = ctx.state.user._id
   const { name } = ctx.request.body
   const board = new BoardModel({ name, userId })
@@ -33,7 +33,11 @@ router.post('/', async (ctx: Ctx<BoardCreateRequest>) => {
   ctx.body = savedBoard
 })
 
-router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
+interface UpdatedBoardRequest {
+  name?: string
+}
+
+router.put('/:id', async (ctx: Ctx<UpdatedBoardRequest, ParamsId>) => {
   const board = await BoardModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -42,14 +46,14 @@ router.put('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   ctx.body = board
 })
 
-interface TaskColumnMoveRequest {
+interface MoveTaskColumnRequest {
   oldPosition: number
   newPosition: number
 }
 
 router.put(
   '/:id/task-column-move',
-  async (ctx: Ctx<TaskColumnMoveRequest, ParamsId>) => {
+  async (ctx: Ctx<MoveTaskColumnRequest, ParamsId>) => {
     const { id } = ctx.params
     const { oldPosition, newPosition } = ctx.request.body
 
