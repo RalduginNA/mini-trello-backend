@@ -1,7 +1,7 @@
 import { Algorithm } from 'jsonwebtoken'
 const {
   JWT_SECRET = 'mini-trello-jwt-secret-1',
-  JWT_TOKEN_EXPIRES_IN = '30 s',
+  JWT_TOKEN_EXPIRES_IN = '1 h',
   JWT_REFRESH_SECRET = 'refresh-mini-trello-jwt-secret',
   JWT_REFRESH_TOKEN_EXPIRES_IN = '7 days',
 } = process.env
