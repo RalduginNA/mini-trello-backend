@@ -5,6 +5,7 @@ import UserModel from './User'
 import BoardModel from './Board'
 import TaskColumnModel from './TaskColumn'
 import { verifyDocumentIds } from '../helpers/validators/document'
+import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 
 export interface Task {
   title: string
@@ -16,20 +17,17 @@ export interface Task {
 
 interface TaskDoc extends Task, Document {}
 
-const schema = new Schema(
-  {
-    title: { type: String, required: true },
-    description: { type: String },
-    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-    boardId: { type: Schema.Types.ObjectId, required: true, ref: 'Board' },
-    taskColumnId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: 'TaskColumn',
-    },
+const schema = new Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  boardId: { type: Schema.Types.ObjectId, required: true, ref: 'Board' },
+  taskColumnId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'TaskColumn',
   },
-  { timestamps: true },
-)
+})
 
 schema.post('validate', async (doc: TaskDoc) => {
   const { boardId, userId, taskColumnId } = doc
@@ -43,5 +41,7 @@ schema.post('validate', async (doc: TaskDoc) => {
     throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
   }
 })
+
+schema.plugin(generalOptionsPlugin)
 
 export default model<TaskDoc>('Task', schema)

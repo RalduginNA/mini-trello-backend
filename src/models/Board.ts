@@ -3,6 +3,7 @@ import UserModel from './User'
 import { STATUS_CODES } from '../constants/api'
 import HttpError from './HttpError'
 import { verifyDocumentId } from '../helpers/validators/document'
+import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 
 export interface Board {
   name: string
@@ -12,24 +13,21 @@ export interface Board {
 
 interface BoardDoc extends Board, Document {}
 
-const schema = new Schema(
-  {
-    name: { type: String, required: true },
-    userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-    taskColumns: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'TaskColumn',
-        },
-      ],
-      required: true,
-      default: [],
-    },
-    // accessLevel: { type: String, enum: ['private', 'public'], required: true }, private or public
+const schema = new Schema({
+  name: { type: String, required: true },
+  userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  taskColumns: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'TaskColumn',
+      },
+    ],
+    required: true,
+    default: [],
   },
-  { timestamps: true },
-)
+  // accessLevel: { type: String, enum: ['private', 'public'], required: true }, private or public
+})
 
 schema.post('validate', async (doc: BoardDoc) => {
   try {
@@ -38,5 +36,7 @@ schema.post('validate', async (doc: BoardDoc) => {
     throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
   }
 })
+
+schema.plugin(generalOptionsPlugin)
 
 export default model<BoardDoc>('Board', schema)

@@ -3,6 +3,7 @@ import BoardModel from './Board'
 import HttpError from './HttpError'
 import { STATUS_CODES } from '../constants/api'
 import { verifyDocumentId } from '../helpers/validators/document'
+import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 
 export interface TaskColum {
   name: string
@@ -12,23 +13,24 @@ export interface TaskColum {
 
 interface TaskColumnDoc extends TaskColum, Document {}
 
-const schema = new Schema(
-  {
-    name: { type: String, required: true },
-    tasks: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Task',
-        },
-      ],
-      required: true,
-      default: [],
-    },
-    boardId: { type: Schema.Types.ObjectId, required: true, ref: 'Board' },
+const schema = new Schema({
+  name: { type: String, required: true },
+  tasks: {
+    type: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Task',
+      },
+    ],
+    required: true,
+    default: [],
   },
-  { timestamps: true },
-)
+  boardId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'Board',
+  },
+})
 
 schema.post('validate', async (doc: TaskColumnDoc) => {
   try {
@@ -37,5 +39,7 @@ schema.post('validate', async (doc: TaskColumnDoc) => {
     throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
   }
 })
+
+schema.plugin(generalOptionsPlugin)
 
 export default model<TaskColumnDoc>('TaskColumn', schema)

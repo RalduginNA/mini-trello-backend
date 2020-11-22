@@ -1,17 +1,17 @@
 import { Schema, Types, model, Document } from 'mongoose'
 
 export interface RefreshSession {
-  user: Types.ObjectId
+  userId: Types.ObjectId
   refreshToken: string
-  created: Date
+  createdAt: Date
 }
 
 interface RefreshSessionDoc extends Document, RefreshSession {}
 
 const schema = new Schema({
-  user: { type: Types.ObjectId, ref: 'User', required: true },
+  userId: { type: Types.ObjectId, ref: 'User', required: true },
   refreshToken: { type: String, required: true },
-  created: { type: Date, default: Date.now, required: true },
+  createdAt: { type: Date, default: Date.now, required: true },
 })
 
 export default model<RefreshSessionDoc>('RefreshSession', schema)

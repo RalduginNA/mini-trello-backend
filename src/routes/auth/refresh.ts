@@ -21,7 +21,7 @@ router.post('/', async (ctx: Ctx<RefreshRequest>) => {
   }
 
   const [user] = await Promise.all([
-    await UserModel.findById(oldRefreshSession.user),
+    await UserModel.findById(oldRefreshSession.userId),
     await RefreshSessionModel.deleteOne({ _id: oldRefreshSession._id }),
     await jwt.verifyToken(oldRefreshSession.refreshToken, true),
   ])
@@ -32,7 +32,7 @@ router.post('/', async (ctx: Ctx<RefreshRequest>) => {
   ])
 
   const refreshSession = new RefreshSessionModel({
-    user: user._id,
+    userId: user._id,
     refreshToken,
   })
 
