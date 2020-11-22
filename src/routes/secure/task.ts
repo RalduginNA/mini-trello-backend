@@ -16,7 +16,7 @@ router.post('/', async (ctx: Ctx<CreateTaskRequest>) => {
 
   const [savedTask] = await Promise.all([
     task.save(),
-    TaskColumnModel.update(
+    TaskColumnModel.updateOne(
       { _id: task.taskColumnId },
       { $addToSet: { tasks: task._id } },
     ),
@@ -54,13 +54,13 @@ router.put(
 
     const task = await TaskModel.findById(id)
     // Promise all ?
-    await TaskColumnModel.update(
+    await TaskColumnModel.updateOne(
       { _id: task.taskColumnId },
       { $pull: { tasks: id } },
       { safe: true, multi: true },
     )
 
-    await TaskColumnModel.update(
+    await TaskColumnModel.updateOne(
       { _id: newTaskColumnId },
       { $push: { tasks: { $each: [id], $position: taskPosition } } },
       { safe: true, multi: true },

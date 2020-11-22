@@ -17,7 +17,7 @@ router.post('/', async (ctx: Ctx<CreateTaskColumn>) => {
 
   const [savedTaskColumn] = await Promise.all([
     await taskColumn.save(),
-    await BoardModel.update(
+    await BoardModel.updateOne(
       { _id: body.boardId },
       { $addToSet: { taskColumns: taskColumn._id } },
     ),
