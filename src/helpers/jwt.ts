@@ -38,14 +38,14 @@ const signAccessToken = async (payload: TokenPayload) => {
 
 const signRefreshToken = async (payload: TokenPayload) => {
   const { JWT_REFRESH_SECRET, JWT_REFRESH_TOKEN_EXPIRES_IN } = config.auth.jwt
-  const accessToken = await signToken({
+  const refreshToken = await signToken({
     ...payload,
     opt: {
       secret: JWT_REFRESH_SECRET,
       expiresIn: JWT_REFRESH_TOKEN_EXPIRES_IN,
     },
   })
-  return accessToken
+  return refreshToken
 }
 
 const verifyToken = async (token: string, refresh?: boolean) => {
