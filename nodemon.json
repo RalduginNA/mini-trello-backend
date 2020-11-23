@@ -4,5 +4,5 @@
     ],
     "ext": ".ts",
     "ignore": [],
-    "exec": "NODE_ENV=development ts-node ./src/main.ts"
+    "exec": "ts-node ./src/main.ts"
 }

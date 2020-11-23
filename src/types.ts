@@ -12,7 +12,7 @@ export interface CtxState {
   user: TokenPayload
 }
 
-export type Environment = 'development' | 'production'
+export type Environment = 'development' | 'debug' | 'production'
 
 interface CtxRequest<T> extends Request {
   body?: T

@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "src/main.js",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "NODE_ENV=development nodemon",
+    "debug": "NODE_ENV=debug nodemon",
     "lint": "eslint \"**/*.ts\" --ignore-pattern node_modules/",
     "prettier-check": "prettier --check"
   },
