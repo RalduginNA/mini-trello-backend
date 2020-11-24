@@ -26,6 +26,7 @@ const schema = new Schema({
     required: true,
     default: [],
   },
+  // members: []
   // accessLevel: { type: String, enum: ['private', 'public'], required: true }, private or public
 })
 

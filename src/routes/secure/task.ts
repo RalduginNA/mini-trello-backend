@@ -36,6 +36,7 @@ router.put('/:id', async (ctx: Ctx<UpdateTaskRequest, ParamsId>) => {
     { $set: { ...ctx.request.body } },
     { new: true },
   )
+
   ctx.response.body = task
 })
 
@@ -45,28 +46,27 @@ interface ChangeTaskColumn {
 }
 
 router.put(
-  '/:id/change-task-column',
+  '/:id/change-column',
   async (ctx: Ctx<ChangeTaskColumn, ParamsId>) => {
     const { id } = ctx.params
     const { newTaskColumnId, taskPosition = 0 } = ctx.request.body
 
     await verifyDocumentId(TaskColumnModel, newTaskColumnId)
-
     const task = await TaskModel.findById(id)
-    // Promise all ?
-    await TaskColumnModel.updateOne(
-      { _id: task.taskColumnId },
-      { $pull: { tasks: id } },
-      { safe: true, multi: true },
-    )
 
-    await TaskColumnModel.updateOne(
-      { _id: newTaskColumnId },
-      { $push: { tasks: { $each: [id], $position: taskPosition } } },
-      { safe: true, multi: true },
-    )
-
-    await task.updateOne({ $set: { taskColumnId: newTaskColumnId } })
+    await Promise.all([
+      TaskColumnModel.updateOne(
+        { _id: task.taskColumnId },
+        { $pull: { tasks: id } },
+        { safe: true, multi: true },
+      ),
+      TaskColumnModel.updateOne(
+        { _id: newTaskColumnId },
+        { $push: { tasks: { $each: [id], $position: taskPosition } } },
+        { safe: true, multi: true },
+      ),
+      task.updateOne({ $set: { taskColumnId: newTaskColumnId } }),
+    ])
 
     ctx.response.body = 'done'
   },
