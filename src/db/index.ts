@@ -5,8 +5,9 @@ import config from '../config'
 const connect = async () => {
   const { DB_CONNECTION } = config.db
   await mongoose.connect(DB_CONNECTION, {
-    useCreateIndex: true,
     useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
     useUnifiedTopology: true,
   })
   console.log(colors.debug('-'.repeat(30)))
