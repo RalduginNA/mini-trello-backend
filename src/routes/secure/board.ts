@@ -61,7 +61,7 @@ router.put(
     const { taskColumns } = board
 
     if (
-      newPosition >= taskColumns.length &&
+      newPosition >= taskColumns.length ||
       oldPosition >= taskColumns.length
     ) {
       throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
