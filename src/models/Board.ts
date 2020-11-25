@@ -27,7 +27,12 @@ const schema = new Schema({
     default: [],
   },
   // members: []
+  // memberships: []
   // accessLevel: { type: String, enum: ['private', 'public'], required: true }, private or public
+  // prefs: {
+  //   backgroundImage: string //s3
+  //   permissionLevel: "private" | 'group'
+  // }
 })
 
 schema.post('validate', async (doc: BoardDoc) => {

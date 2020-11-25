@@ -11,6 +11,7 @@
 # Will think about session and session between devices (device id, fingerprint, uniq)
 # Add request validation
 # Add headers
+# Add sockets or long pulling
 ---------------------------------------------
 Done
 # Replace _id to id and remove __v

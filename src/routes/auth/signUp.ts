@@ -23,7 +23,7 @@ router.post('/', async (ctx: Ctx<SignUpRequest>) => {
   ])
 
   const refreshSession = new RefreshSessionModel({
-    user: savedUser.id,
+    userId: savedUser.id,
     refreshToken: refreshToken,
   })
   const savedRefreshSession = await refreshSession.save()
