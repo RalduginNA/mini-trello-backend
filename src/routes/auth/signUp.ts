@@ -6,13 +6,13 @@ import { Ctx } from '../../types'
 
 const router = new Router({ prefix: '/signUp' })
 
-interface SignUpRequest {
+interface SignUpDto {
   username: string
   email: string
   password: string
 }
 
-router.post('/', async (ctx: Ctx<SignUpRequest>) => {
+router.post('/', async (ctx: Ctx<SignUpDto>) => {
   const { username, email, password } = ctx.request.body
   const user = new UserModel({ username, email })
   await user.setPassword(password)

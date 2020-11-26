@@ -8,12 +8,12 @@ import RefreshSessionModel from '../../models/RefreshSession'
 
 const router = new Router({ prefix: '/signIn' })
 
-interface SignInRequest {
+interface SignInDto {
   email: string
   password: string
 }
 
-router.post('/', async (ctx: Ctx<SignInRequest>) => {
+router.post('/', async (ctx: Ctx<SignInDto>) => {
   const { email, password } = ctx.request.body
   const user = await User.findOne({ email: email })
   if (!user) {

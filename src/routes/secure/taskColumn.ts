@@ -8,9 +8,9 @@ import { Types } from 'mongoose'
 
 const router = new Router({ prefix: '/taskColumns' })
 
-interface CreateTaskColumn extends TaskColum {}
+interface CreateTaskColumnDto extends TaskColum {}
 
-router.post('/', async (ctx: Ctx<CreateTaskColumn>) => {
+router.post('/', async (ctx: Ctx<CreateTaskColumnDto>) => {
   const { body } = ctx.request
   const taskColumn = new TaskColumnModel({ ...body })
   await taskColumn.validate()
@@ -26,12 +26,12 @@ router.post('/', async (ctx: Ctx<CreateTaskColumn>) => {
   ctx.response.body = savedTaskColumn
 })
 
-interface UpdateTaskOrderRequest {
+interface UpdateTaskOrderDto {
   name: string
   boardId: Types.ObjectId
 }
 
-router.put('/:id', async (ctx: Ctx<UpdateTaskOrderRequest, ParamsId>) => {
+router.put('/:id', async (ctx: Ctx<UpdateTaskOrderDto, ParamsId>) => {
   const taskColumn = await TaskColumnModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -40,12 +40,12 @@ router.put('/:id', async (ctx: Ctx<UpdateTaskOrderRequest, ParamsId>) => {
   ctx.response.body = taskColumn
 })
 
-interface TaskOrderRequest {
+interface TaskOrderDto {
   oldPosition: number
   newPosition: number
 }
 
-router.put('/:id/task-order', async (ctx: Ctx<TaskOrderRequest, ParamsId>) => {
+router.put('/:id/task-order', async (ctx: Ctx<TaskOrderDto, ParamsId>) => {
   const { id } = ctx.params
   const { oldPosition, newPosition } = ctx.request.body
 

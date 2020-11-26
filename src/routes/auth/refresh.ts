@@ -7,11 +7,11 @@ import { STATUS_CODES } from '../../constants/api'
 
 const router = new Router({ prefix: '/refresh' })
 
-interface RefreshRequest {
+interface RefreshDto {
   refreshToken: string
 }
 
-router.post('/', async (ctx: Ctx<RefreshRequest>) => {
+router.post('/', async (ctx: Ctx<RefreshDto>) => {
   const oldRefreshSession = await RefreshSessionModel.findOne({
     refreshToken: ctx.request.body.refreshToken,
   })

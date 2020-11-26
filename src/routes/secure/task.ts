@@ -6,9 +6,9 @@ import { Ctx, ParamsId } from '../../types'
 
 const router = new Router({ prefix: '/tasks' })
 
-interface CreateTaskRequest extends Task {}
+interface CreateTaskDto extends Task {}
 
-router.post('/', async (ctx: Ctx<CreateTaskRequest>) => {
+router.post('/', async (ctx: Ctx<CreateTaskDto>) => {
   const { body } = ctx.request
   const { _id: userId } = ctx.state.user
   const task = new TaskModel({ ...body, userId })
@@ -25,12 +25,12 @@ router.post('/', async (ctx: Ctx<CreateTaskRequest>) => {
   ctx.response.body = savedTask
 })
 
-interface UpdateTaskRequest {
+interface UpdateTaskDto {
   title?: string
   description?: string
 }
 
-router.put('/:id', async (ctx: Ctx<UpdateTaskRequest, ParamsId>) => {
+router.put('/:id', async (ctx: Ctx<UpdateTaskDto, ParamsId>) => {
   const task = await TaskModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
@@ -40,14 +40,14 @@ router.put('/:id', async (ctx: Ctx<UpdateTaskRequest, ParamsId>) => {
   ctx.response.body = task
 })
 
-interface ChangeTaskColumn {
+interface ChangeTaskColumnDto {
   newTaskColumnId: string
   taskPosition?: number
 }
 
 router.put(
   '/:id/change-column',
-  async (ctx: Ctx<ChangeTaskColumn, ParamsId>) => {
+  async (ctx: Ctx<ChangeTaskColumnDto, ParamsId>) => {
     const { id } = ctx.params
     const { newTaskColumnId, taskPosition = 0 } = ctx.request.body
 
