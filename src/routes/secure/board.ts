@@ -14,9 +14,9 @@ router.get('/', async (ctx: Ctx<{}, ParamsId>) => {
 
 router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const board = await BoardModel.findById(ctx.params.id).populate({
-    path: 'taskColumns',
+    path: 'lists',
     populate: {
-      path: 'tasks',
+      path: 'cards',
     },
   })
 
@@ -46,37 +46,31 @@ router.put('/:id', async (ctx: Ctx<UpdatedBoardDto, ParamsId>) => {
   ctx.body = board
 })
 
-interface MoveTaskColumnDto {
+interface MoveListDto {
   oldPosition: number
   newPosition: number
 }
 
-router.put(
-  '/:id/task-column-move',
-  async (ctx: Ctx<MoveTaskColumnDto, ParamsId>) => {
-    const { id } = ctx.params
-    const { oldPosition, newPosition } = ctx.request.body
+router.put('/:id/list-move', async (ctx: Ctx<MoveListDto, ParamsId>) => {
+  const { id } = ctx.params
+  const { oldPosition, newPosition } = ctx.request.body
 
-    const board = await BoardModel.findById(id)
-    const { taskColumns } = board
+  const board = await BoardModel.findById(id)
+  const { lists } = board
 
-    if (
-      newPosition >= taskColumns.length ||
-      oldPosition >= taskColumns.length
-    ) {
-      throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
-    }
+  if (newPosition >= lists.length || oldPosition >= lists.length) {
+    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
+  }
 
-    taskColumns.splice(newPosition, 0, taskColumns.splice(oldPosition, 1)[0])
+  lists.splice(newPosition, 0, lists.splice(oldPosition, 1)[0])
 
-    const updatedBoard = await BoardModel.findByIdAndUpdate(
-      id,
-      { $set: { taskColumns: taskColumns } },
-      { new: true },
-    )
+  const updatedBoard = await BoardModel.findByIdAndUpdate(
+    id,
+    { $set: { lists: lists } },
+    { new: true },
+  )
 
-    ctx.body = { taskColumnIds: updatedBoard.taskColumns }
-  },
-)
+  ctx.body = { listIds: updatedBoard.lists }
+})
 
 export default router

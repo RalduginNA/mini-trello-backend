@@ -3,39 +3,39 @@ import HttpError from './HttpError'
 import { STATUS_CODES } from '../constants/api'
 import UserModel from './User'
 import BoardModel from './Board'
-import TaskColumnModel from './TaskColumn'
+import ListModel from './List'
 import { verifyDocumentIds } from '../helpers/validators/document'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 
-export interface Task {
+export interface Card {
   title: string
   description?: string
   userId: Types.ObjectId
   boardId: Types.ObjectId
-  taskColumnId: Types.ObjectId
+  listId: Types.ObjectId
 }
 
-interface TaskDoc extends Task, Document {}
+interface CardDoc extends Card, Document {}
 
 const schema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
   userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   boardId: { type: Schema.Types.ObjectId, required: true, ref: 'Board' },
-  taskColumnId: {
+  listId: {
     type: Schema.Types.ObjectId,
     required: true,
-    ref: 'TaskColumn',
+    ref: 'List',
   },
 })
 
-schema.post('validate', async (doc: TaskDoc) => {
-  const { boardId, userId, taskColumnId } = doc
+schema.post('validate', async (doc: CardDoc) => {
+  const { boardId, userId, listId } = doc
   try {
     await verifyDocumentIds([
       [BoardModel, boardId],
       [UserModel, userId],
-      [TaskColumnModel, taskColumnId],
+      [ListModel, listId],
     ])
   } catch (err) {
     throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
@@ -44,4 +44,4 @@ schema.post('validate', async (doc: TaskDoc) => {
 
 schema.plugin(generalOptionsPlugin)
 
-export default model<TaskDoc>('Task', schema)
+export default model<CardDoc>('Card', schema)

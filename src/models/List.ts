@@ -5,21 +5,21 @@ import { STATUS_CODES } from '../constants/api'
 import { verifyDocumentId } from '../helpers/validators/document'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 
-export interface TaskColum {
+export interface List {
   name: string
-  tasks: Array<Types.ObjectId>
+  cards: Array<Types.ObjectId>
   boardId: Types.ObjectId
 }
 
-interface TaskColumnDoc extends TaskColum, Document {}
+interface ListDoc extends List, Document {}
 
 const schema = new Schema({
   name: { type: String, required: true },
-  tasks: {
+  cards: {
     type: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'Task',
+        ref: 'Card',
       },
     ],
     required: true,
@@ -32,7 +32,7 @@ const schema = new Schema({
   },
 })
 
-schema.post('validate', async (doc: TaskColumnDoc) => {
+schema.post('validate', async (doc: ListDoc) => {
   try {
     await verifyDocumentId(BoardModel, doc.boardId)
   } catch (err) {
@@ -42,4 +42,4 @@ schema.post('validate', async (doc: TaskColumnDoc) => {
 
 schema.plugin(generalOptionsPlugin)
 
-export default model<TaskColumnDoc>('TaskColumn', schema)
+export default model<ListDoc>('List', schema)

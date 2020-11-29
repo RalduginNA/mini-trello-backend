@@ -8,7 +8,7 @@ import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 export interface Board {
   name: string
   userId: Types.ObjectId
-  taskColumns: Array<Types.ObjectId>
+  lists: Array<Types.ObjectId>
 }
 
 interface BoardDoc extends Board, Document {}
@@ -16,11 +16,11 @@ interface BoardDoc extends Board, Document {}
 const schema = new Schema({
   name: { type: String, required: true },
   userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-  taskColumns: {
+  lists: {
     type: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'TaskColumn',
+        ref: 'List',
       },
     ],
     required: true,
