@@ -7,17 +7,16 @@ import { Types } from 'mongoose'
 export interface TokenPayload {
   _id: Types.ObjectId
   username: string
-  email: string
 }
 
 export interface SignTokenParams extends TokenPayload {
   opt: { secret: string; expiresIn?: string }
 }
 
-const signToken = async ({ _id, username, email, opt }: SignTokenParams) => {
+const signToken = async ({ _id, username, opt }: SignTokenParams) => {
   const { secret, expiresIn } = opt
   const { JWT_ALGORITHM } = config.auth.jwt
-  const token = await jwt.sign({ _id, username, email }, secret, {
+  const token = await jwt.sign({ _id, username }, secret, {
     algorithm: JWT_ALGORITHM,
     expiresIn,
   })
@@ -59,9 +58,9 @@ const verifyToken = async (token: string, refresh?: boolean) => {
     throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid token payload')
   }
 
-  const { _id, username, email } = decoded
+  const { _id, username } = decoded
 
-  if (!_id || !username || !email) {
+  if (!_id || !username) {
     throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid token payload')
   }
 

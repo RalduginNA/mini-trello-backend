@@ -1,26 +1,33 @@
 import Router from '@koa/router'
 import BoardModel, { Board } from '../../models/Board'
+import UserModel from '../../models/User'
+import MembershipModel from '../../models/Membership'
+import CardModel from '../../models/Card'
 import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
+import { MEMBERSHIP_ROLES } from '../../constants/general'
 
 const router = new Router({ prefix: '/boards' })
 
 router.get('/', async (ctx: Ctx<{}, ParamsId>) => {
-  const { _id: userId } = ctx.state.user
-  const boards = await BoardModel.find({ userId })
+  const boards = await UserModel.findById(ctx.state.user._id).populate({
+    path: 'boards',
+  })
   ctx.body = boards
 })
 
 router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
-  const board = await BoardModel.findById(ctx.params.id).populate({
+  const boardId = ctx.params.id
+  const board = await BoardModel.findById(boardId).populate({
     path: 'lists',
-    populate: {
-      path: 'cards',
-    },
   })
+  if (!board) {
+    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Board not found')
+  }
+  const cards = await CardModel.find({ boardId: boardId })
 
-  ctx.body = board
+  ctx.body = { ...board.toJSON(), cards }
 })
 
 interface CreateBoardDto extends Board {}
@@ -28,8 +35,27 @@ interface CreateBoardDto extends Board {}
 router.post('/', async (ctx: Ctx<CreateBoardDto>) => {
   const userId = ctx.state.user._id
   const { name } = ctx.request.body
-  const board = new BoardModel({ name, userId })
-  const savedBoard = await board.save()
+
+  const board = new BoardModel({
+    name,
+    users: [userId],
+    // TODO: remove default image
+    settings: {
+      backgroundImage:
+        'https://wallpapertag.com/wallpaper/full/d/b/6/255909-vertical-minimalistic-wallpaper-3840x2160-images.jpg',
+    },
+  })
+
+  const [savedBoard] = await Promise.all([
+    board.save(),
+    UserModel.updateOne({ _id: userId }, { $push: { boards: board._id } }),
+    MembershipModel.create({
+      boardId: board._id,
+      userId: userId,
+      role: MEMBERSHIP_ROLES.ADMIN,
+    }),
+  ])
+
   ctx.body = savedBoard
 })
 

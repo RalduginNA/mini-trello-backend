@@ -22,10 +22,7 @@ const authentication: Middleware = async (ctx, next) => {
   }
   ////---------------------
   try {
-    const { _id, username, email } = await jwt.verifyAuthentication(
-      ctx.header.authorization,
-    )
-    ctx.state.user = { _id, username, email }
+    ctx.state.user = await jwt.verifyAuthentication(ctx.header.authorization)
   } catch (err) {
     ctx.throw(STATUS_CODES.UNAUTHORIZED, err)
   }

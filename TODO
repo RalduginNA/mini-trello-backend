@@ -12,6 +12,7 @@
 # Add request validation
 # Add headers
 # Add sockets or long pulling
+# Improve access refresh token
 ---------------------------------------------
 Done
 # Replace _id to id and remove __v

@@ -6,6 +6,7 @@ import BoardModel from './Board'
 import ListModel from './List'
 import { verifyDocumentIds } from '../helpers/validators/document'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
+import { Timestamp } from '../types'
 
 export interface Card {
   title: string
@@ -15,7 +16,7 @@ export interface Card {
   listId: Types.ObjectId
 }
 
-interface CardDoc extends Card, Document {}
+interface CardDoc extends Card, Timestamp, Document {}
 
 const schema = new Schema({
   title: { type: String, required: true },

@@ -27,8 +27,8 @@ router.post('/', async (ctx: Ctx<SignInDto>) => {
     ctx.throw(STATUS_CODES.UNAUTHORIZED, 'Incorrect password or email')
   }
   const [accessToken, refreshToken] = await Promise.all([
-    jwt.signAccessToken({ _id, username, email }),
-    jwt.signRefreshToken({ _id, username, email }),
+    jwt.signAccessToken(user.getTokenPayload()),
+    jwt.signRefreshToken(user.getTokenPayload()),
   ])
 
   const refreshSession = new RefreshSessionModel({

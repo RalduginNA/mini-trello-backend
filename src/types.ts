@@ -22,6 +22,7 @@ export interface Ctx<BodyT = {}, ParamsT = {}, StateT = CtxState>
   extends ParameterizedContext<StateT, RouterParamContext<StateT, {}>> {
   request: CtxRequest<BodyT>
   params: ParamsT
+  // body
 }
 
 export interface ParamsId {

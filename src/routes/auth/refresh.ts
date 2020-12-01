@@ -38,7 +38,7 @@ router.post('/', async (ctx: Ctx<RefreshDto>) => {
 
   const savedRefreshSession = await refreshSession.save()
 
-  ctx.response.body = {
+  ctx.body = {
     accessToken,
     refreshToken: savedRefreshSession.refreshToken,
   }

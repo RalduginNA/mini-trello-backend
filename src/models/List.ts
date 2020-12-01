@@ -4,6 +4,7 @@ import HttpError from './HttpError'
 import { STATUS_CODES } from '../constants/api'
 import { verifyDocumentId } from '../helpers/validators/document'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
+import { Timestamp } from '../types'
 
 export interface List {
   name: string
@@ -11,7 +12,7 @@ export interface List {
   boardId: Types.ObjectId
 }
 
-interface ListDoc extends List, Document {}
+interface ListDoc extends List, Timestamp, Document {}
 
 const schema = new Schema({
   name: { type: String, required: true },

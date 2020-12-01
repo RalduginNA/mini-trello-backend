@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import ListModel, { List } from '../../models/List'
+import ListModel from '../../models/List'
 import BoardModel from '../../models/Board'
 import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
@@ -8,7 +8,10 @@ import { Types } from 'mongoose'
 
 const router = new Router({ prefix: '/lists' })
 
-interface CreateListDto extends List {}
+interface CreateListDto {
+  name: string
+  boardId: Types.ObjectId
+}
 
 router.post('/', async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
@@ -23,7 +26,7 @@ router.post('/', async (ctx: Ctx<CreateListDto>) => {
     ),
   ])
 
-  ctx.response.body = savedList
+  ctx.body = savedList
 })
 
 interface UpdateListDto {
@@ -37,7 +40,7 @@ router.put('/:id', async (ctx: Ctx<UpdateListDto, ParamsId>) => {
     { $set: { ...ctx.request.body } },
     { new: true },
   )
-  ctx.response.body = list
+  ctx.body = list
 })
 
 interface CardOrderDto {
@@ -52,7 +55,13 @@ router.put('/:id/card-order', async (ctx: Ctx<CardOrderDto, ParamsId>) => {
   const board = await ListModel.findById(id)
   const { cards } = board
 
-  if (newPosition >= cards.length && oldPosition >= cards.length) {
+  if (
+    newPosition < 0 ||
+    oldPosition < 0 ||
+    oldPosition == newPosition ||
+    newPosition >= cards.length ||
+    oldPosition >= cards.length
+  ) {
     throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
   }
 

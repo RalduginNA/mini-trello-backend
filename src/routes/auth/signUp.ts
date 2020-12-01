@@ -17,13 +17,14 @@ router.post('/', async (ctx: Ctx<SignUpDto>) => {
   const user = new UserModel({ username, email })
   await user.setPassword(password)
   const savedUser = await user.save()
+
   const [accessToken, refreshToken] = await Promise.all([
-    jwt.signAccessToken(savedUser.toObject()),
-    jwt.signRefreshToken(savedUser.toObject()),
+    jwt.signAccessToken(savedUser.getTokenPayload()),
+    jwt.signRefreshToken(savedUser.getTokenPayload()),
   ])
 
   const refreshSession = new RefreshSessionModel({
-    userId: savedUser.id,
+    userId: savedUser._id,
     refreshToken: refreshToken,
   })
   const savedRefreshSession = await refreshSession.save()

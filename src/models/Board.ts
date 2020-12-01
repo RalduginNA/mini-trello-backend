@@ -1,21 +1,23 @@
 import { Schema, model, Types, Document } from 'mongoose'
-import UserModel from './User'
-import { STATUS_CODES } from '../constants/api'
-import HttpError from './HttpError'
-import { verifyDocumentId } from '../helpers/validators/document'
+import { BOARD_PERMISSION_LEVEL } from '../constants/general'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
+import { Timestamp } from '../types'
 
 export interface Board {
   name: string
-  userId: Types.ObjectId
+  users: Array<Types.ObjectId>
   lists: Array<Types.ObjectId>
+  settings: {
+    backgroundImage: string
+    permissionLevel: BOARD_PERMISSION_LEVEL
+  }
 }
 
-interface BoardDoc extends Board, Document {}
+interface BoardDoc extends Board, Timestamp, Document {}
 
 const schema = new Schema({
   name: { type: String, required: true },
-  userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  users: { type: [{ type: Types.ObjectId, ref: 'User' }], required: true },
   lists: {
     type: [
       {
@@ -26,21 +28,15 @@ const schema = new Schema({
     required: true,
     default: [],
   },
-  // members: []
-  // memberships: []
-  // accessLevel: { type: String, enum: ['private', 'public'], required: true }, private or public
-  // prefs: {
-  //   backgroundImage: string //s3
-  //   permissionLevel: "private" | 'group'
-  // }
-})
-
-schema.post('validate', async (doc: BoardDoc) => {
-  try {
-    await verifyDocumentId(UserModel, doc.userId)
-  } catch (err) {
-    throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
-  }
+  settings: {
+    backgroundImage: { type: String, required: true, default: '' },
+    permissionLevel: {
+      type: String,
+      enum: [BOARD_PERMISSION_LEVEL.PRIVATE, BOARD_PERMISSION_LEVEL.GROUP],
+      required: true,
+      default: BOARD_PERMISSION_LEVEL.PRIVATE,
+    },
+  },
 })
 
 schema.plugin(generalOptionsPlugin)

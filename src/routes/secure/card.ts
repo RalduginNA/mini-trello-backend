@@ -22,7 +22,7 @@ router.post('/', async (ctx: Ctx<CreateCardDto>) => {
     ),
   ])
 
-  ctx.response.body = savedCard
+  ctx.body = savedCard
 })
 
 interface UpdateCardDto {
@@ -37,7 +37,7 @@ router.put('/:id', async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
     { new: true },
   )
 
-  ctx.response.body = card
+  ctx.body = card
 })
 
 interface ChangeCardListDto {
@@ -67,8 +67,8 @@ router.put(
       ),
       card.updateOne({ $set: { listId: newListId } }),
     ])
-
-    ctx.response.body = 'done'
+    // TODO: Add request
+    ctx.body = 'done'
   },
 )
 
