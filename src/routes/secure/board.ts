@@ -7,6 +7,7 @@ import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
+import { arrayMove } from '../../helpers/functions'
 
 const router = new Router({ prefix: '/boards' })
 
@@ -81,18 +82,13 @@ router.put('/:id/list-move', async (ctx: Ctx<MoveListDto, ParamsId>) => {
   const { id } = ctx.params
   const { oldPosition, newPosition } = ctx.request.body
 
-  const board = await BoardModel.findById(id)
-  const { lists } = board
+  const { lists } = await BoardModel.findById(id)
 
-  if (newPosition >= lists.length || oldPosition >= lists.length) {
-    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
-  }
-
-  lists.splice(newPosition, 0, lists.splice(oldPosition, 1)[0])
+  const reorderedLists = arrayMove(lists, oldPosition, newPosition)
 
   const updatedBoard = await BoardModel.findByIdAndUpdate(
     id,
-    { $set: { lists: lists } },
+    { $set: { lists: reorderedLists } },
     { new: true },
   )
 

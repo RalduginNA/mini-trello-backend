@@ -1,10 +1,9 @@
 import Router from '@koa/router'
 import ListModel from '../../models/List'
 import BoardModel from '../../models/Board'
-import HttpError from '../../models/HttpError'
-import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
 import { Types } from 'mongoose'
+import { arrayMove } from '../../helpers/functions'
 
 const router = new Router({ prefix: '/lists' })
 
@@ -52,24 +51,13 @@ router.put('/:id/card-order', async (ctx: Ctx<CardOrderDto, ParamsId>) => {
   const { id } = ctx.params
   const { oldPosition, newPosition } = ctx.request.body
 
-  const board = await ListModel.findById(id)
-  const { cards } = board
+  const { cards } = await ListModel.findById(id)
 
-  if (
-    newPosition < 0 ||
-    oldPosition < 0 ||
-    oldPosition == newPosition ||
-    newPosition >= cards.length ||
-    oldPosition >= cards.length
-  ) {
-    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Incorrect position')
-  }
-
-  cards.splice(newPosition, 0, cards.splice(oldPosition, 1)[0])
+  const reorderedCards = arrayMove(cards, oldPosition, newPosition)
 
   const updatedList = await ListModel.findByIdAndUpdate(
     id,
-    { $set: { cards: cards } },
+    { $set: { cards: reorderedCards } },
     { new: true },
   )
 
