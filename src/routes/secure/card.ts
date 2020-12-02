@@ -55,15 +55,10 @@ router.put(
     const card = await CardModel.findById(id)
 
     await Promise.all([
-      ListModel.updateOne(
-        { _id: card.listId },
-        { $pull: { cards: id } },
-        { safe: true, multi: true },
-      ),
+      ListModel.updateOne({ _id: card.listId }, { $pull: { cards: id } }),
       ListModel.updateOne(
         { _id: newListId },
         { $push: { cards: { $each: [id], $position: cardPosition } } },
-        { safe: true, multi: true },
       ),
       card.updateOne({ $set: { listId: newListId } }),
     ])
