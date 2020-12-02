@@ -21,13 +21,14 @@ router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const boardId = ctx.params.id
   const board = await BoardModel.findById(boardId).populate({
     path: 'lists',
+    populate: {
+      path: 'cards',
+    },
   })
   if (!board) {
     ctx.throw(STATUS_CODES.BAD_REQUEST, 'Board not found')
   }
-  const cards = await CardModel.find({ boardId: boardId })
-
-  ctx.body = { ...board.toJSON(), cards }
+  ctx.body = board
 })
 
 interface CreateBoardDto extends Board {}
