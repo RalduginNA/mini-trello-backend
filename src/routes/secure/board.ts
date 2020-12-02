@@ -3,7 +3,6 @@ import BoardModel, { Board } from '../../models/Board'
 import UserModel from '../../models/User'
 import MembershipModel from '../../models/Membership'
 import CardModel from '../../models/Card'
-import HttpError from '../../models/HttpError'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
@@ -24,7 +23,7 @@ router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
     path: 'lists',
   })
   if (!board) {
-    throw new HttpError(STATUS_CODES.BAD_REQUEST, 'Board not found')
+    ctx.throw(STATUS_CODES.BAD_REQUEST, 'Board not found')
   }
   const cards = await CardModel.find({ boardId: boardId })
 
