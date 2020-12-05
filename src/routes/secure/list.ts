@@ -25,7 +25,7 @@ router.post('/', async (ctx: Ctx<CreateListDto>) => {
 
   const savedList = await list.save()
 
-  ctx.body = savedList
+  ctx.body = { ...savedList.toJSON(), cards: [] }
 })
 
 interface UpdateListDto {
