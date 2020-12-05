@@ -1,9 +1,8 @@
 import Router from '@koa/router'
 import ListModel from '../../models/List'
-import BoardModel from '../../models/Board'
 import { Ctx, ParamsId } from '../../types'
 import { Types } from 'mongoose'
-import { arrayMove } from '../../helpers/functions'
+import { STATUS_CODES } from '../../constants/api'
 
 const router = new Router({ prefix: '/lists' })
 
@@ -15,15 +14,16 @@ interface CreateListDto {
 router.post('/', async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
   const list = new ListModel({ ...body })
-  await list.validate()
 
-  const [savedList] = await Promise.all([
-    await list.save(),
-    await BoardModel.updateOne(
-      { _id: body.boardId },
-      { $addToSet: { lists: list._id } },
-    ),
-  ])
+  const listWithMaxPosition = (
+    await ListModel.find({ boardId: list.boardId })
+      .sort({ position: -1 })
+      .limit(1)
+  )[0]
+
+  list.position = listWithMaxPosition?.position + 1 || 1
+
+  const savedList = await list.save()
 
   ctx.body = savedList
 })
@@ -42,26 +42,54 @@ router.put('/:id', async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   ctx.body = list
 })
 
-interface CardOrderDto {
-  oldPosition: number
-  newPosition: number
+interface ListMoveDto {
+  position: number
 }
 
-router.put('/:id/card-order', async (ctx: Ctx<CardOrderDto, ParamsId>) => {
+router.put('/:id/move', async (ctx: Ctx<ListMoveDto, ParamsId>) => {
   const { id } = ctx.params
-  const { oldPosition, newPosition } = ctx.request.body
-
-  const { cards } = await ListModel.findById(id)
-
-  const reorderedCards = arrayMove(cards, oldPosition, newPosition)
-
-  const updatedList = await ListModel.findByIdAndUpdate(
-    id,
-    { $set: { cards: reorderedCards } },
-    { new: true },
+  const { position } = ctx.request.body
+  const list = await ListModel.findOneAndUpdate(
+    { _id: id },
+    { $set: { position: position } },
   )
+  const updatedList = await ListModel.findById(id)
+  const { position: oldPosition, boardId } = list
+  const difference = oldPosition - position
+  const differenceIsPositive = difference > 0
+  const listsInBoard = await ListModel.find({
+    listId: boardId,
+    _id: { $ne: id },
+  })
 
-  ctx.body = { cardIds: updatedList.cards }
+  if (
+    listsInBoard.length + 1 < position ||
+    position < 1 ||
+    oldPosition === position
+  ) {
+    ctx.throw(STATUS_CODES.BAD_REQUEST, 'Incorrect newPosition')
+  }
+
+  await Promise.all([
+    listsInBoard.map((doc) => {
+      if (
+        differenceIsPositive
+          ? doc.position < oldPosition && doc.position >= position
+          : doc.position > oldPosition && doc.position <= position
+      ) {
+        doc.position = doc.position + (differenceIsPositive ? 1 : -1)
+        return doc.save()
+      }
+    }),
+  ])
+
+  listsInBoard.push(updatedList)
+
+  ctx.body = listsInBoard
+    .sort((a, b) => a.position - b.position)
+    .map(
+      ({ name, id, position }) => `Card ${name} | Pos ${position} | Id ${id}`,
+    )
 })
 
 export default router

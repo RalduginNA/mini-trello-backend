@@ -8,24 +8,15 @@ import { Timestamp } from '../types'
 
 export interface List {
   name: string
-  cards: Array<Types.ObjectId>
   boardId: Types.ObjectId
+  position: number
 }
 
 interface ListDoc extends List, Timestamp, Document {}
 
 const schema = new Schema({
   name: { type: String, required: true },
-  cards: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Card',
-      },
-    ],
-    required: true,
-    default: [],
-  },
+  position: { type: Number, required: true },
   boardId: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -39,6 +30,13 @@ schema.post('validate', async (doc: ListDoc) => {
   } catch (err) {
     throw new HttpError(STATUS_CODES.BAD_REQUEST, err.message)
   }
+})
+
+schema.virtual('cards', {
+  ref: 'Card',
+  localField: '_id',
+  foreignField: 'listId',
+  justOne: false,
 })
 
 schema.plugin(generalOptionsPlugin)

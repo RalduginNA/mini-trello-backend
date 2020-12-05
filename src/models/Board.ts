@@ -6,7 +6,6 @@ import { Timestamp } from '../types'
 export interface Board {
   name: string
   users: Array<Types.ObjectId>
-  lists: Array<Types.ObjectId>
   settings: {
     backgroundImage: string
     permissionLevel: BOARD_PERMISSION_LEVEL
@@ -18,16 +17,6 @@ interface BoardDoc extends Board, Timestamp, Document {}
 const schema = new Schema({
   name: { type: String, required: true },
   users: { type: [{ type: Types.ObjectId, ref: 'User' }], required: true },
-  lists: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'List',
-      },
-    ],
-    required: true,
-    default: [],
-  },
   settings: {
     backgroundImage: { type: String, required: true, default: '' },
     permissionLevel: {
@@ -37,6 +26,13 @@ const schema = new Schema({
       default: BOARD_PERMISSION_LEVEL.PRIVATE,
     },
   },
+})
+
+schema.virtual('lists', {
+  ref: 'List',
+  localField: '_id',
+  foreignField: 'boardId',
+  justOne: false,
 })
 
 schema.plugin(generalOptionsPlugin)

@@ -10,10 +10,12 @@ export function generalOptionsPlugin(schema: Schema) {
   schema.set('timestamps', true)
 
   schema.set('toObject', {
+    virtuals: true,
     transform: transformForResponse,
   })
 
   schema.set('toJSON', {
+    virtuals: true,
     transform: transformForResponse,
   })
 }

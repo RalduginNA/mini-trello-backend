@@ -7,6 +7,7 @@ import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
 import { arrayMove } from '../../helpers/functions'
+import { Types } from 'mongoose'
 
 const router = new Router({ prefix: '/boards' })
 
@@ -21,9 +22,7 @@ router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
   const boardId = ctx.params.id
   const board = await BoardModel.findById(boardId).populate({
     path: 'lists',
-    populate: {
-      path: 'cards',
-    },
+    populate: { path: 'cards' },
   })
   if (!board) {
     ctx.throw(STATUS_CODES.BAD_REQUEST, 'Board not found')
@@ -71,28 +70,6 @@ router.put('/:id', async (ctx: Ctx<UpdatedBoardDto, ParamsId>) => {
     { new: true },
   )
   ctx.body = board
-})
-
-interface MoveListDto {
-  oldPosition: number
-  newPosition: number
-}
-
-router.put('/:id/list-move', async (ctx: Ctx<MoveListDto, ParamsId>) => {
-  const { id } = ctx.params
-  const { oldPosition, newPosition } = ctx.request.body
-
-  const { lists } = await BoardModel.findById(id)
-
-  const reorderedLists = arrayMove(lists, oldPosition, newPosition)
-
-  const updatedBoard = await BoardModel.findByIdAndUpdate(
-    id,
-    { $set: { lists: reorderedLists } },
-    { new: true },
-  )
-
-  ctx.body = { listIds: updatedBoard.lists }
 })
 
 export default router
