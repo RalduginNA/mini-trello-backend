@@ -9,20 +9,12 @@ const router = new Router({ prefix: '/lists' })
 interface CreateListDto {
   name: string
   boardId: Types.ObjectId
+  position: number
 }
 
 router.post('/', async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
   const list = new ListModel({ ...body })
-  // getLastPosition
-  const listWithMaxPosition = (
-    await ListModel.find({ boardId: list.boardId })
-      .sort({ position: -1 })
-      .limit(1)
-  )[0]
-
-  list.position = listWithMaxPosition?.position + 1 || 1
-
   const savedList = await list.save()
 
   ctx.body = { ...savedList.toJSON(), cards: [] }
@@ -30,7 +22,6 @@ router.post('/', async (ctx: Ctx<CreateListDto>) => {
 
 interface UpdateListDto {
   name?: string
-  boardId?: Types.ObjectId
   position?: number
 }
 
