@@ -1,1 +1,1 @@
-export enum ErrorCodes {}
+export const ErrorCodes = {}

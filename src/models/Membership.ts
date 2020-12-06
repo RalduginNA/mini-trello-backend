@@ -11,16 +11,8 @@ export interface Membership {
 interface MembershipDoc extends Membership, Document {}
 
 const schema = new Schema({
-  boardId: {
-    type: Types.ObjectId,
-    required: true,
-    ref: 'Board',
-  },
-  userId: {
-    type: Types.ObjectId,
-    required: true,
-    ref: 'User',
-  },
+  boardId: { type: Types.ObjectId, required: true, ref: 'Board' },
+  userId: { type: Types.ObjectId, required: true, ref: 'User' },
   role: {
     type: String,
     enum: [MEMBERSHIP_ROLES.ADMIN, MEMBERSHIP_ROLES.USER],

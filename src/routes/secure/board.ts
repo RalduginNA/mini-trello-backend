@@ -2,13 +2,9 @@ import Router from '@koa/router'
 import BoardModel, { Board } from '../../models/Board'
 import UserModel from '../../models/User'
 import MembershipModel from '../../models/Membership'
-import CardModel from '../../models/Card'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
-import { arrayMove } from '../../helpers/functions'
-import { Types } from 'mongoose'
-
 const router = new Router({ prefix: '/boards' })
 
 router.get('/', async (ctx: Ctx<{}, ParamsId>) => {
