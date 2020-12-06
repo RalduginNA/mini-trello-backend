@@ -5,6 +5,7 @@ import MembershipModel from '../../models/Membership'
 import { STATUS_CODES } from '../../constants/api'
 import { Ctx, ParamsId } from '../../types'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
+
 const router = new Router({ prefix: '/boards' })
 
 router.get('/', async (ctx: Ctx<{}, ParamsId>) => {

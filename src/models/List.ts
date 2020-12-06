@@ -16,7 +16,7 @@ interface ListDoc extends List, Timestamp, Document {}
 
 const schema = new Schema({
   name: { type: String, required: true },
-  position: { type: Number, required: true, unique: true },
+  position: { type: Number, required: true },
   boardId: { type: Types.ObjectId, required: true, ref: 'Board' },
 })
 

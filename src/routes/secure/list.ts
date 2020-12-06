@@ -32,6 +32,7 @@ router.put('/:id', async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   if (body.position) {
     const list = await ListModel.findById(id)
     const listsOfBoard = await ListModel.find({
+      _id: { $ne: id },
       boardId: list.boardId,
       position: { $gte: body.position },
     }).sort({ position: 1 })
@@ -55,6 +56,7 @@ router.put('/:id', async (ctx: Ctx<UpdateListDto, ParamsId>) => {
     { $set: { ...body } },
     { new: true },
   )
+
   ctx.body = list
 })
 

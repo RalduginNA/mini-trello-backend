@@ -31,6 +31,7 @@ router.put('/:id', async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   if (body.position) {
     const card = await CardModel.findById(id)
     const cardsOfList = await CardModel.find({
+      _id: { $ne: id },
       listId: body.listId || card.listId,
       position: { $gte: body.position },
     }).sort({ position: 1 })

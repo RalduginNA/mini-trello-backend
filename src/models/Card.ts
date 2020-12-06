@@ -24,7 +24,7 @@ const schema = new Schema({
   description: { type: String },
   userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
   boardId: { type: Schema.Types.ObjectId, required: true, ref: 'Board' },
-  position: { type: Number, required: true, unique: true },
+  position: { type: Number, required: true },
   listId: {
     type: Schema.Types.ObjectId,
     required: true,
