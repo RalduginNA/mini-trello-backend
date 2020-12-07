@@ -35,6 +35,13 @@ schema.virtual('lists', {
   justOne: false,
 })
 
+schema.virtual('cards', {
+  ref: 'Card',
+  localField: '_id',
+  foreignField: 'boardId',
+  justOne: false,
+})
+
 schema.plugin(generalOptionsPlugin)
 
 export default model<BoardDoc>('Board', schema)
