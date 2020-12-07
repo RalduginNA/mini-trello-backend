@@ -23,8 +23,3 @@ export const verifyDocumentIds = async (
     arr.map(([model, id, errMsg]) => verifyDocumentId(model, id, errMsg)),
   )
 }
-
-export default {
-  verifyDocumentId,
-  verifyDocumentIds,
-}

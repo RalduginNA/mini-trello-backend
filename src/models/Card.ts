@@ -4,7 +4,7 @@ import { STATUS_CODES } from '../constants/api'
 import UserModel from './User'
 import BoardModel from './Board'
 import ListModel from './List'
-import { verifyDocumentIds } from '../helpers/validators/document'
+import { verifyDocumentIds } from '../helpers/document'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 import { Timestamp } from '../types'
 

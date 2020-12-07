@@ -2,7 +2,7 @@ import { Schema, model, Types, Document } from 'mongoose'
 import BoardModel from './Board'
 import HttpError from './HttpError'
 import { STATUS_CODES } from '../constants/api'
-import { verifyDocumentId } from '../helpers/validators/document'
+import { verifyDocumentId } from '../helpers/document'
 import { generalOptionsPlugin } from '../helpers/schemaPlugin'
 import { Timestamp } from '../types'
 
