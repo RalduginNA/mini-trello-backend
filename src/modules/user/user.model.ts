@@ -1,15 +1,9 @@
 import { Schema, model, Document, Types } from 'mongoose'
-import hash from '../helpers/hash'
-import { TokenPayload } from '../helpers/jwt'
-import { generalOptionsPlugin } from '../helpers/schemaPlugin'
-import { Timestamp } from '../types'
-
-export interface User {
-  username: string
-  email: string
-  passwordHash: string
-  boards: Array<Types.ObjectId>
-}
+import { User } from './user.interfaces'
+import { TokenPayload } from '../../helpers/jwt'
+import { Timestamp } from '../../types'
+import hash from '../../helpers/hash'
+import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
 
 interface UserDoc extends User, Timestamp, Document {
   setPassword: (password: string) => Promise<void>

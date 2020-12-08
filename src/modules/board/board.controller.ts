@@ -1,21 +1,19 @@
-import Router from '@koa/router'
-import BoardModel, { Board } from '../../models/Board'
-import UserModel from '../../models/User'
-import MembershipModel from '../../models/Membership'
-import { STATUS_CODES } from '../../constants/api'
+import BoardModel from '../board/board.model'
+import { CreateBoardDto, UpdatedBoardDto } from './board.interfaces'
+import UserModel from '../user/user.model'
 import { Ctx, ParamsId } from '../../types'
+import { STATUS_CODES } from '../../constants/api'
+import MembershipModel from '../membership/membership.model'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
 
-const router = new Router({ prefix: '/boards' })
-
-router.get('/', async (ctx: Ctx<{}, ParamsId>) => {
+const getAll = async (ctx: Ctx<{}, ParamsId>) => {
   const boards = await UserModel.findById(ctx.state.user._id).populate({
     path: 'boards',
   })
   ctx.body = boards
-})
+}
 
-router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
+const get = async (ctx: Ctx<{}, ParamsId>) => {
   const boardId = ctx.params.id
   const board = await BoardModel.findById(boardId)
     .populate('lists')
@@ -25,11 +23,9 @@ router.get('/:id', async (ctx: Ctx<{}, ParamsId>) => {
     ctx.throw(STATUS_CODES.BAD_REQUEST, 'Board not found')
   }
   ctx.body = board
-})
+}
 
-interface CreateBoardDto extends Board {}
-
-router.post('/', async (ctx: Ctx<CreateBoardDto>) => {
+const create = async (ctx: Ctx<CreateBoardDto>) => {
   const userId = ctx.state.user._id
   const { name } = ctx.request.body
 
@@ -54,19 +50,20 @@ router.post('/', async (ctx: Ctx<CreateBoardDto>) => {
   ])
 
   ctx.body = savedBoard
-})
-
-interface UpdatedBoardDto {
-  name?: string
 }
 
-router.put('/:id', async (ctx: Ctx<UpdatedBoardDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdatedBoardDto, ParamsId>) => {
   const board = await BoardModel.findByIdAndUpdate(
     { _id: ctx.params.id },
     { $set: { ...ctx.request.body } },
     { new: true },
   )
   ctx.body = board
-})
+}
 
-export default router
+export default {
+  getAll,
+  get,
+  create,
+  update,
+}

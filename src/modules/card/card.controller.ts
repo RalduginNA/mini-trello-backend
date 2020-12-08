@@ -1,30 +1,20 @@
-import Router from '@koa/router'
-import { Types } from 'mongoose'
 import { MOVE_STEP } from '../../constants/general'
-import CardModel, { Card } from '../../models/Card'
 import { Ctx, ParamsId } from '../../types'
-
-const router = new Router({ prefix: '/cards' })
+import { Card, UpdateCardDto } from './card.interfaces'
+import CardModel from './card.model'
 
 interface CreateCardDto extends Card {}
 
-router.post('/', async (ctx: Ctx<CreateCardDto>) => {
+const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request
   const { _id: userId } = ctx.state.user
   const card = new CardModel({ ...body, userId })
   const savedCard = await card.save()
 
   ctx.body = savedCard
-})
-
-interface UpdateCardDto {
-  title?: string
-  description?: string
-  position?: number
-  listId?: Types.ObjectId
 }
 
-router.put('/:id', async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
 
@@ -57,6 +47,6 @@ router.put('/:id', async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   )
 
   ctx.body = card
-})
+}
 
-export default router
+export default { create, update }

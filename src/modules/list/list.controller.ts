@@ -1,31 +1,17 @@
-import Router from '@koa/router'
-import ListModel from '../../models/List'
-import { Ctx, ParamsId } from '../../types'
-import { Types } from 'mongoose'
 import { MOVE_STEP } from '../../constants/general'
+import { Ctx, ParamsId } from '../../types'
+import { CreateListDto, UpdateListDto } from './list.interfaces'
+import ListModel from './list.model'
 
-const router = new Router({ prefix: '/lists' })
-
-interface CreateListDto {
-  name: string
-  boardId: Types.ObjectId
-  position: number
-}
-
-router.post('/', async (ctx: Ctx<CreateListDto>) => {
+const create = async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
   const list = new ListModel({ ...body })
   const savedList = await list.save()
 
   ctx.body = { ...savedList.toJSON(), cards: [] }
-})
-
-interface UpdateListDto {
-  name?: string
-  position?: number
 }
 
-router.put('/:id', async (ctx: Ctx<UpdateListDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
 
@@ -58,6 +44,9 @@ router.put('/:id', async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   )
 
   ctx.body = list
-})
+}
 
-export default router
+export default {
+  create,
+  update,
+}

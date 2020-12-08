@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
-import HttpError from '../models/HttpError'
+import HttpError from './HttpError'
 import { STATUS_CODES } from '../constants/api'
 import { Types } from 'mongoose'
+import { ErrorCodes } from '../constants/error'
 
 export interface TokenPayload {
   _id: Types.ObjectId
@@ -55,13 +56,19 @@ const verifyToken = async (token: string, refresh?: boolean) => {
   })) as TokenPayload
 
   if (!decoded || typeof decoded !== 'object') {
-    throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid token payload')
+    throw new HttpError(
+      STATUS_CODES.UNAUTHORIZED,
+      ErrorCodes.Invalid.TokenPayload,
+    )
   }
 
   const { _id, username } = decoded
 
   if (!_id || !username) {
-    throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid token payload')
+    throw new HttpError(
+      STATUS_CODES.UNAUTHORIZED,
+      ErrorCodes.Invalid.TokenPayload,
+    )
   }
 
   return decoded
@@ -69,7 +76,10 @@ const verifyToken = async (token: string, refresh?: boolean) => {
 
 const verifyAuthentication = async (authorizationHeader?: string) => {
   if (!authorizationHeader) {
-    throw new HttpError(STATUS_CODES.UNAUTHORIZED, 'Invalid authorization')
+    throw new HttpError(
+      STATUS_CODES.UNAUTHORIZED,
+      ErrorCodes.Invalid.Authorization,
+    )
   }
   const parts = authorizationHeader.split(' ')
   const scheme = parts[0]
@@ -78,7 +88,7 @@ const verifyAuthentication = async (authorizationHeader?: string) => {
   if (!/^Bearer$/i.test(scheme)) {
     throw new HttpError(
       STATUS_CODES.UNAUTHORIZED,
-      'Invalid authorization scheme',
+      ErrorCodes.Invalid.AuthorizationScheme,
     )
   }
   return await verifyToken(credentials)

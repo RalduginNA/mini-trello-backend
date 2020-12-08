@@ -1,16 +1,11 @@
 import { Schema, model, Types, Document } from 'mongoose'
-import BoardModel from './Board'
-import HttpError from './HttpError'
-import { STATUS_CODES } from '../constants/api'
-import { verifyDocumentId } from '../helpers/document'
-import { generalOptionsPlugin } from '../helpers/schemaPlugin'
-import { Timestamp } from '../types'
-
-export interface List {
-  name: string
-  boardId: Types.ObjectId
-  position: number
-}
+import { STATUS_CODES } from '../../constants/api'
+import { verifyDocumentId } from '../../helpers/document'
+import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { Timestamp } from '../../types'
+import HttpError from '../../helpers/HttpError'
+import BoardModel from '../board/board.model'
+import { List } from './list.interfaces'
 
 interface ListDoc extends List, Timestamp, Document {}
 

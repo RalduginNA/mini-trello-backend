@@ -1,16 +1,8 @@
 import { Schema, model, Types, Document } from 'mongoose'
-import { BOARD_PERMISSION_LEVEL } from '../constants/general'
-import { generalOptionsPlugin } from '../helpers/schemaPlugin'
-import { Timestamp } from '../types'
-
-export interface Board {
-  name: string
-  users: Array<Types.ObjectId>
-  settings: {
-    backgroundImage: string
-    permissionLevel: BOARD_PERMISSION_LEVEL
-  }
-}
+import { Board } from './board.interfaces'
+import { BOARD_PERMISSION_LEVEL } from '../../constants/general'
+import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { Timestamp } from '../../types'
 
 interface BoardDoc extends Board, Timestamp, Document {}
 

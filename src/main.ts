@@ -4,10 +4,11 @@ import bodyParser from 'koa-bodyparser'
 import db from './db'
 import colors from './helpers/colors'
 import errorHandler from './middlewares/errorHandler'
-import rootRouter from './routes'
+import setupRoutes from './setupRoutes'
 import config from './config'
 
 const app = new Koa()
+const rootRouter = setupRoutes()
 
 app.use(errorHandler)
 app.use(bodyParser())

@@ -1,32 +1,24 @@
 import { Schema, model, Document, Types } from 'mongoose'
-import HttpError from './HttpError'
-import { STATUS_CODES } from '../constants/api'
-import UserModel from './User'
-import BoardModel from './Board'
-import ListModel from './List'
-import { verifyDocumentIds } from '../helpers/document'
-import { generalOptionsPlugin } from '../helpers/schemaPlugin'
-import { Timestamp } from '../types'
-
-export interface Card {
-  title: string
-  description?: string
-  userId: Types.ObjectId
-  boardId: Types.ObjectId
-  listId: Types.ObjectId
-  position: number
-}
+import { Card } from './card.interfaces'
+import BoardModel from '../board/board.model'
+import ListModel from '../list/list.model'
+import UserModel from '../user/user.model'
+import { STATUS_CODES } from '../../constants/api'
+import { verifyDocumentIds } from '../../helpers/document'
+import HttpError from '../../helpers/HttpError'
+import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { Timestamp } from '../../types'
 
 interface CardDoc extends Card, Timestamp, Document {}
 
 const schema = new Schema({
   title: { type: String, required: true },
   description: { type: String },
-  userId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
-  boardId: { type: Schema.Types.ObjectId, required: true, ref: 'Board' },
+  userId: { type: Types.ObjectId, required: true, ref: 'User' },
+  boardId: { type: Types.ObjectId, required: true, ref: 'Board' },
   position: { type: Number, required: true },
   listId: {
-    type: Schema.Types.ObjectId,
+    type: Types.ObjectId,
     required: true,
     ref: 'List',
   },

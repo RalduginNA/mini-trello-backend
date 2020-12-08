@@ -1,10 +1,5 @@
 import { Schema, Types, model, Document } from 'mongoose'
-
-export interface RefreshSession {
-  userId: Types.ObjectId
-  refreshToken: string
-  createdAt: Date
-}
+import { RefreshSession } from './refreshSession.interfaces'
 
 interface RefreshSessionDoc extends Document, RefreshSession {}
 
