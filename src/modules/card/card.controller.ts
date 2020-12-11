@@ -1,9 +1,7 @@
 import CardModel from './card.model'
-import { Card, UpdateCardDto } from './card.interfaces'
+import { CreateCardDto, UpdateCardDto } from './card.interfaces'
 import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
-
-interface CreateCardDto extends Card {}
 
 const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request
@@ -18,12 +16,15 @@ const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
 
-  if (body.position) {
+  if (body.position || body.listId) {
     const card = await CardModel.findById(id)
+    const position = body.position || card.position
+    const listId = body.listId || card.listId
+
     const cardsOfList = await CardModel.find({
       _id: { $ne: id },
-      listId: body.listId || card.listId,
-      position: { $gte: body.position },
+      listId: listId,
+      position: { $gte: position },
     }).sort({ position: 1 })
 
     await Promise.all(

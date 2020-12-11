@@ -9,9 +9,7 @@ export interface Card {
   position: number
 }
 
-export interface UpdateCardDto {
-  title?: string
-  description?: string
-  position?: number
-  listId?: Types.ObjectId
-}
+export interface CreateCardDto extends Omit<Card, 'userId'> {}
+
+export interface UpdateCardDto
+  extends Partial<Omit<Card, 'userId' | 'boardId'>> {}

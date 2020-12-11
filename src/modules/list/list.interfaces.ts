@@ -6,13 +6,6 @@ export interface List {
   position: number
 }
 
-export interface CreateListDto {
-  name: string
-  boardId: Types.ObjectId
-  position: number
-}
+export interface CreateListDto extends List {}
 
-export interface UpdateListDto {
-  name?: string
-  position?: number
-}
+export interface UpdateListDto extends Partial<Omit<List, 'boardId'>> {}
