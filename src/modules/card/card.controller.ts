@@ -1,7 +1,7 @@
+import CardModel from './card.model'
+import { Card, UpdateCardDto } from './card.interfaces'
 import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
-import { Card, UpdateCardDto } from './card.interfaces'
-import CardModel from './card.model'
 
 interface CreateCardDto extends Card {}
 

@@ -18,6 +18,7 @@ const get = async (ctx: Ctx<{}, ParamsId>) => {
   const board = await BoardModel.findById(boardId)
     .populate('lists')
     .populate('cards')
+    .populate('memberships')
 
   if (!board) {
     ctx.throw(STATUS_CODES.BAD_REQUEST, 'Board not found')
