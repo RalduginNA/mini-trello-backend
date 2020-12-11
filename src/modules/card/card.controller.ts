@@ -49,4 +49,13 @@ const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   ctx.body = card
 }
 
-export default { create, update }
+const deleteCard = async (ctx: Ctx<{}, ParamsId>) => {
+  const { id } = ctx.params
+  await CardModel.deleteOne({ _id: id })
+}
+
+export default {
+  create,
+  update,
+  delete: deleteCard,
+}

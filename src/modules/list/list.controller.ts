@@ -2,6 +2,7 @@ import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
 import { CreateListDto, UpdateListDto } from './list.interfaces'
 import ListModel from './list.model'
+import CardModel from '../card/card.model'
 
 const create = async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
@@ -46,7 +47,16 @@ const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   ctx.body = list
 }
 
+const deleteList = async (ctx: Ctx<{}, ParamsId>) => {
+  const { id } = ctx.params
+  await Promise.all([
+    ListModel.deleteOne({ _id: id }),
+    CardModel.deleteMany({ listId: id }),
+  ])
+}
+
 export default {
   create,
   update,
+  delete: deleteList,
 }

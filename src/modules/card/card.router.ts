@@ -5,5 +5,6 @@ const router = new Router({ prefix: `/cards` })
 
 router.post('/', CardController.create)
 router.put('/:id', CardController.update)
+router.delete('/:id', CardController.delete)
 
 export default router

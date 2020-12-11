@@ -5,5 +5,6 @@ const router = new Router({ prefix: `/lists` })
 
 router.post('/', ListController.create)
 router.put('/:id', ListController.update)
+router.delete('/:id', ListController.delete)
 
 export default router
