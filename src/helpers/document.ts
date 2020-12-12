@@ -1,10 +1,10 @@
 import { Model, Types, Document } from 'mongoose'
 
-export const verifyDocumentId = async (
-  model: Model<Document>,
+export async function verifyDocumentId<T = {}>(
+  model: Model<T & Document>,
   id: Types.ObjectId | string,
   errMsg?: string,
-) => {
+) {
   const document = await model.findById(id)
   if (!document) {
     throw new Error(
@@ -12,6 +12,7 @@ export const verifyDocumentId = async (
         `Document from ${model.collection.collectionName} collection doesn't exist`,
     )
   }
+  return document
 }
 
 export const verifyDocumentIds = async (

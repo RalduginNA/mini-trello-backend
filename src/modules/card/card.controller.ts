@@ -2,6 +2,7 @@ import CardModel from './card.model'
 import { CreateCardDto, UpdateCardDto } from './card.interfaces'
 import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
+import { verifyDocumentId } from '../../helpers/document'
 
 const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request
@@ -15,9 +16,9 @@ const create = async (ctx: Ctx<CreateCardDto>) => {
 const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
+  const card = await verifyDocumentId(CardModel, id)
 
   if (body.position || body.listId) {
-    const card = await CardModel.findById(id)
     const position = body.position || card.position
     const listId = body.listId || card.listId
 
@@ -41,13 +42,13 @@ const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
     )
   }
 
-  const card = await CardModel.findByIdAndUpdate(
+  const updatedCard = await CardModel.findByIdAndUpdate(
     { _id: id },
     { $set: { ...body } },
     { new: true },
   )
 
-  ctx.body = card
+  ctx.body = updatedCard
 }
 
 const deleteCard = async (ctx: Ctx<{}, ParamsId>) => {
