@@ -6,7 +6,7 @@ import { STATUS_CODES } from '../../constants/api'
 import MembershipModel from '../membership/membership.model'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
 
-const getAll = async (ctx: Ctx<{}, ParamsId>) => {
+const getAll = async (ctx: Ctx<{}>) => {
   const boards = await UserModel.findById(ctx.state.user._id).populate({
     path: 'boards',
   })

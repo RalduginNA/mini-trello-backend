@@ -1,11 +1,13 @@
 import Router from '@koa/router'
-import BoardController from '../board/board.controller'
+import BoardController from './board.controller'
+import BoardScheme from './board.scheme'
+import validateRequest from '../../middlewares/validateRequest'
 
 const router = new Router({ prefix: `/boards` })
 
 router.get('/', BoardController.getAll)
 router.get('/:id', BoardController.get)
-router.post('/', BoardController.create)
-router.put('/:id', BoardController.update)
+router.post('/', validateRequest(BoardScheme.create), BoardController.create)
+router.put('/:id', validateRequest(BoardScheme.update), BoardController.update)
 
 export default router

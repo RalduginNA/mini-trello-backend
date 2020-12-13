@@ -9,3 +9,5 @@ export enum MEMBERSHIP_ROLES {
   ADMIN = 'admin',
   USER = 'user',
 }
+
+export const PASSWORD_REGEX = /^[\x20-\x7E]+$/

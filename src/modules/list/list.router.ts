@@ -1,10 +1,12 @@
 import Router from '@koa/router'
-import ListController from '../list/list.controller'
+import ListScheme from './list.scheme'
+import ListController from './list.controller'
+import validateRequest from '../../middlewares/validateRequest'
 
 const router = new Router({ prefix: `/lists` })
 
-router.post('/', ListController.create)
-router.put('/:id', ListController.update)
+router.post('/', validateRequest(ListScheme.create), ListController.create)
+router.put('/:id', validateRequest(ListScheme.update), ListController.update)
 router.delete('/:id', ListController.delete)
 
 export default router
