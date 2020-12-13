@@ -1,6 +1,7 @@
 import Koa from 'koa'
 import cors from '@koa/cors'
 import bodyParser from 'koa-bodyparser'
+import helmet from 'koa-helmet'
 import db from './db'
 import colors from './helpers/colors'
 import errorHandler from './middlewares/errorHandler'
@@ -10,6 +11,7 @@ import config from './config'
 const app = new Koa()
 const rootRouter = setupRoutes()
 
+app.use(helmet())
 app.use(errorHandler)
 app.use(bodyParser())
 app.use(cors())
