@@ -7,9 +7,8 @@ import MembershipModel from '../membership/membership.model'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
 
 const getAll = async (ctx: Ctx<{}>) => {
-  const boards = await UserModel.findById(ctx.state.user._id).populate({
-    path: 'boards',
-  })
+  const { user } = ctx.state
+  const boards = await BoardModel.find({ users: { $in: [user._id] } })
   ctx.body = boards
 }
 
