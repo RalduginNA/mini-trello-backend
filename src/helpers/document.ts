@@ -15,11 +15,9 @@ export async function verifyDocumentId<T extends Document>(
   return document
 }
 
-export const verifyDocumentIds = async (
-  arr: Array<
-    [model: Model<Document>, id: Types.ObjectId | string, errMsg?: string]
-  >,
-) => {
+export async function verifyDocumentIds<T>(
+  arr: Array<[model: Model<any>, id: Types.ObjectId | string, errMsg?: string]>,
+) {
   Promise.all(
     arr.map(([model, id, errMsg]) => verifyDocumentId(model, id, errMsg)),
   )

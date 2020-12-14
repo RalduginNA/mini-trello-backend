@@ -17,14 +17,14 @@ const schema = new Schema({
     lowercase: true,
     unique: true,
     required: [true, "can't be blank"],
-    match: [/^[a-zA-Z0-9]+$/, 'is invalid'],
+    match: /^[a-zA-Z0-9]+$/,
   },
   email: {
     type: String,
     lowercase: true,
     unique: true,
     required: [true, "can't be blank"],
-    match: [/\S+@\S+\.\S+/, 'is invalid'],
+    match: /\S+@\S+\.\S+/,
   },
   boards: {
     type: [{ type: Types.ObjectId, ref: 'Board' }],
