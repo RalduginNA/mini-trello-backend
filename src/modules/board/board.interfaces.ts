@@ -10,8 +10,8 @@ export interface Board {
   }
 }
 
-export interface CreateBoardDto extends Omit<Board, 'users'> {}
+export interface CreateBoardDto extends Omit<Board, 'users' | 'settings'> {}
 
-export interface UpdatedBoardDto {
+export interface UpdateBoardDto {
   name?: string
 }

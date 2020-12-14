@@ -1,7 +1,7 @@
 import { Model, Types, Document } from 'mongoose'
 
-export async function verifyDocumentId<T = {}>(
-  model: Model<T & Document>,
+export async function verifyDocumentId<T extends Document>(
+  model: Model<T>,
   id: Types.ObjectId | string,
   errMsg?: string,
 ) {

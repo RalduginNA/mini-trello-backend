@@ -1,12 +1,13 @@
+import { ExtendsKeys } from './../../types'
 import Joi from 'joi'
-import { CreateBoardDto, UpdatedBoardDto } from './board.interfaces'
+import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
 
-const create = Joi.object<CreateBoardDto>({
+const create: ExtendsKeys<CreateBoardDto> = {
   name: Joi.string().required(),
-})
+}
 
-const update = Joi.object<UpdatedBoardDto>({
+const update: ExtendsKeys<UpdateBoardDto> = {
   name: Joi.string(),
-})
+}
 
-export default { create, update }
+export default { create: Joi.object(create), update: Joi.object(update) }

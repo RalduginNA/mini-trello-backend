@@ -3,6 +3,7 @@ import { Ctx, ParamsId } from '../../types'
 import { CreateListDto, UpdateListDto } from './list.interfaces'
 import ListModel from './list.model'
 import CardModel from '../card/card.model'
+import { STATUS_CODES } from '../../constants/api'
 
 const create = async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
@@ -49,6 +50,9 @@ const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
 
 const deleteList = async (ctx: Ctx<{}, ParamsId>) => {
   const { id } = ctx.params
+  const list = await ListModel.findById(id)
+  ctx.assert(list, STATUS_CODES.BAD_REQUEST, 'List not found')
+
   await Promise.all([
     ListModel.deleteOne({ _id: id }),
     CardModel.deleteMany({ listId: id }),

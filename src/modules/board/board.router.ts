@@ -9,5 +9,6 @@ router.get('/', BoardController.getAll)
 router.get('/:id', BoardController.get)
 router.post('/', validateRequest(BoardScheme.create), BoardController.create)
 router.put('/:id', validateRequest(BoardScheme.update), BoardController.update)
+router.delete('/:id', BoardController.delete)
 
 export default router

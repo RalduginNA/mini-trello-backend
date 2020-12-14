@@ -10,16 +10,18 @@ import { ErrorCodes } from '../../constants/error'
 const signIn = async (ctx: Ctx<SignInDto>) => {
   const { email, password } = ctx.request.body
   const user = await UserModel.findOne({ email: email })
-  if (!user) {
-    ctx.throw(STATUS_CODES.UNAUTHORIZED, 'User does not have an account yet')
-  }
+
+  ctx.assert(
+    user,
+    STATUS_CODES.UNAUTHORIZED,
+    'User does not have an account yet',
+  )
 
   const { _id, username, passwordHash, createdAt, updatedAt } = user
-
   const isValidPassword = await hash.verify(passwordHash, password)
-  if (!isValidPassword) {
-    ctx.throw(STATUS_CODES.UNAUTHORIZED, 'Incorrect password or email')
-  }
+
+  ctx.assert(isValidPassword, STATUS_CODES.UNAUTHORIZED, 'Incorrect password')
+
   const [accessToken, refreshToken] = await Promise.all([
     jwt.signAccessToken(user.getTokenPayload()),
     jwt.signRefreshToken(user.getTokenPayload()),
@@ -75,9 +77,11 @@ const refresh = async (ctx: Ctx<RefreshDto>) => {
     refreshToken: ctx.request.body.refreshToken,
   })
 
-  if (!oldRefreshSession) {
-    ctx.throw(STATUS_CODES.UNAUTHORIZED, ErrorCodes.Invalid.RefreshToken)
-  }
+  ctx.assert(
+    oldRefreshSession,
+    STATUS_CODES.UNAUTHORIZED,
+    ErrorCodes.Invalid.RefreshToken,
+  )
 
   const [user] = await Promise.all([
     await UserModel.findById(oldRefreshSession.userId),

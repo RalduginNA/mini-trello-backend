@@ -1,21 +1,25 @@
 import Joi from 'joi'
 import { SignInDto, SignUpDto, RefreshDto } from './auth.interfaces'
 import { PASSWORD_REGEX } from '../../constants/general'
+import { ExtendsKeys } from './../../types'
 
-const signIn = Joi.object<SignInDto>({
+const signIn: ExtendsKeys<SignInDto> = {
   email: Joi.string().email().required(),
-  password: Joi.string().regex(PASSWORD_REGEX).min(8).max(72).required(),
-})
+  password: Joi.string().regex(PASSWORD_REGEX).min(5).max(72).required(),
+}
 
-const signUp = Joi.object<SignUpDto>({
+const signUp: ExtendsKeys<SignUpDto> = {
+  ...signIn,
   username: Joi.string().required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().regex(PASSWORD_REGEX).min(8).max(72).required(),
   confirmPassword: Joi.string().valid(Joi.ref('password')).required(),
-})
+}
 
-const refresh = Joi.object<RefreshDto>({
+const refresh: ExtendsKeys<RefreshDto> = {
   refreshToken: Joi.string().required(),
-})
+}
 
-export default { signIn, signUp, refresh }
+export default {
+  signIn: Joi.object(signIn),
+  signUp: Joi.object(signUp),
+  refresh: Joi.object(refresh),
+}

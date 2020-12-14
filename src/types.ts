@@ -28,3 +28,6 @@ export interface Ctx<BodyT = {}, ParamsT = {}, StateT = CtxState>
 export interface ParamsId {
   id: Types.ObjectId
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ExtendsKeys<T> = Record<keyof T, any>

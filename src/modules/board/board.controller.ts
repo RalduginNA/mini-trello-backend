@@ -1,5 +1,5 @@
 import BoardModel from '../board/board.model'
-import { CreateBoardDto, UpdatedBoardDto } from './board.interfaces'
+import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
 import UserModel from '../user/user.model'
 import { Ctx, ParamsId } from '../../types'
 import { STATUS_CODES } from '../../constants/api'
@@ -14,14 +14,21 @@ const getAll = async (ctx: Ctx<{}>) => {
 
 const get = async (ctx: Ctx<{}, ParamsId>) => {
   const boardId = ctx.params.id
+  const userId = ctx.state.user._id
+
+  const membership = await MembershipModel.findOne({
+    boardId: boardId,
+    userId: userId,
+  })
+  ctx.assert(membership, STATUS_CODES.BAD_REQUEST, "Don't have permission")
+
   const board = await BoardModel.findById(boardId)
     .populate('lists')
     .populate('cards')
     .populate('memberships')
 
-  if (!board) {
-    ctx.throw(STATUS_CODES.BAD_REQUEST, 'Board not found')
-  }
+  ctx.assert(board, STATUS_CODES.BAD_REQUEST, 'Board not found')
+
   ctx.body = board
 }
 
@@ -52,13 +59,39 @@ const create = async (ctx: Ctx<CreateBoardDto>) => {
   ctx.body = savedBoard
 }
 
-const update = async (ctx: Ctx<UpdatedBoardDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
+  const { id } = ctx.params
+  const { user } = ctx.state
+  const membership = await MembershipModel.findOne({
+    boardId: id,
+    userId: user._id,
+  })
+  ctx.assert(membership, STATUS_CODES.BAD_REQUEST, "Don't have permission")
+
   const board = await BoardModel.findByIdAndUpdate(
-    { _id: ctx.params.id },
+    { _id: id },
     { $set: { ...ctx.request.body } },
     { new: true },
   )
+  ctx.assert(board, STATUS_CODES.BAD_REQUEST, 'Board not found')
+
   ctx.body = board
+}
+
+const deleteBoard = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
+  const { id } = ctx.params
+  const { user } = ctx.state
+  const membership = await MembershipModel.findOne({
+    boardId: id,
+    userId: user._id,
+  })
+  ctx.assert(
+    membership && membership.role === MEMBERSHIP_ROLES.ADMIN,
+    STATUS_CODES.BAD_REQUEST,
+    "Don't have permission",
+  )
+
+  await BoardModel.deleteOne({ _id: id })
 }
 
 export default {
@@ -66,4 +99,5 @@ export default {
   get,
   create,
   update,
+  delete: deleteBoard,
 }

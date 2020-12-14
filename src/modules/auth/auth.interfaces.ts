@@ -3,10 +3,8 @@ export interface SignInDto {
   password: string
 }
 
-export interface SignUpDto {
+export interface SignUpDto extends SignInDto {
   username: string
-  email: string
-  password: string
   confirmPassword: string
 }
 
