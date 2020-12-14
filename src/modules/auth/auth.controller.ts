@@ -90,8 +90,8 @@ const refresh = async (ctx: Ctx<RefreshDto>) => {
   ])
 
   const [accessToken, refreshToken] = await Promise.all([
-    jwt.signAccessToken(user.toObject()),
-    jwt.signRefreshToken(user),
+    jwt.signAccessToken(user.getTokenPayload()),
+    jwt.signRefreshToken(user.getTokenPayload()),
   ])
 
   const refreshSession = new RefreshSessionModel({
