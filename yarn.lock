@@ -254,16 +254,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@koa/router@npm:^9.4.0":
-  version: 9.4.0
-  resolution: "@koa/router@npm:9.4.0"
+"@koa/router@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "@koa/router@npm:10.0.0"
   dependencies:
     debug: ^4.1.1
     http-errors: ^1.7.3
     koa-compose: ^4.1.0
     methods: ^1.1.2
     path-to-regexp: ^6.1.0
-  checksum: 225a891b9e33e9f00571dd567f739315209b84f875cdfd66064e1dbe3196172ede64a185c4db6f89f05c153df55a3b221ecc40fb18c0ef1da0587d12ccff4d8f
+  checksum: bbc41166758ce41573aca9a008cf95337d3bfcb88ae2f2cc7f13328408232769670991ebcb1227371a924c05fff68a5071fc1d57ce7deb1d86dc9c9e6beced90
   languageName: node
   linkType: hard
 
@@ -551,7 +551,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongoose@npm:^5.10.0":
+"@types/mongoose@npm:^5.10.3":
   version: 5.10.3
   resolution: "@types/mongoose@npm:5.10.3"
   dependencies:
@@ -561,7 +561,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^14.14.7":
+"@types/node@npm:*, @types/node@npm:^14.14.13":
   version: 14.14.13
   resolution: "@types/node@npm:14.14.13"
   checksum: a879dae2e047e75055b0f4fb217aac31e905e49f921054f6425e8494e7a75dec82d351770b1a0e79a00322345896646a4dadc5fa27c857e392d6909e54cdba9e
@@ -615,7 +615,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^4.8.1":
+"@typescript-eslint/eslint-plugin@npm:^4.10.0":
   version: 4.10.0
   resolution: "@typescript-eslint/eslint-plugin@npm:4.10.0"
   dependencies:
@@ -652,7 +652,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^4.8.1":
+"@typescript-eslint/parser@npm:^4.10.0":
   version: 4.10.0
   resolution: "@typescript-eslint/parser@npm:4.10.0"
   dependencies:
@@ -877,7 +877,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"argon2@npm:^0.27.0":
+"argon2@npm:^0.27.1":
   version: 0.27.1
   resolution: "argon2@npm:0.27.1"
   dependencies:
@@ -1130,7 +1130,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:4.1.0, chalk@npm:^4.0.0":
+"chalk@npm:4.1.0, chalk@npm:^4.0.0, chalk@npm:^4.1.0":
   version: 4.1.0
   resolution: "chalk@npm:4.1.0"
   dependencies:
@@ -1843,7 +1843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.2.0":
+"eslint@npm:^7.15.0":
   version: 7.15.0
   resolution: "eslint@npm:7.15.0"
   dependencies:
@@ -3306,21 +3306,21 @@ fsevents@~2.1.2:
     "@commitlint/cli": ^11.0.0
     "@commitlint/config-conventional": ^11.0.0
     "@koa/cors": ^3.1.0
-    "@koa/router": ^9.4.0
+    "@koa/router": ^10.0.0
     "@types/jsonwebtoken": ^8.5.0
     "@types/koa": ^2.11.6
     "@types/koa-bodyparser": ^4.3.0
     "@types/koa-helmet": ^6.0.1
     "@types/koa__cors": ^3.0.2
     "@types/koa__router": ^8.0.3
-    "@types/mongoose": ^5.10.0
-    "@types/node": ^14.14.7
-    "@typescript-eslint/eslint-plugin": ^4.8.1
-    "@typescript-eslint/parser": ^4.8.1
-    argon2: ^0.27.0
-    chalk: ^3.0.0
+    "@types/mongoose": ^5.10.3
+    "@types/node": ^14.14.13
+    "@typescript-eslint/eslint-plugin": ^4.10.0
+    "@typescript-eslint/parser": ^4.10.0
+    argon2: ^0.27.1
+    chalk: ^4.1.0
     dotenv: ^8.2.0
-    eslint: ^7.2.0
+    eslint: ^7.15.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-security: ^1.4.0
     husky: ^4.3.6
@@ -3329,11 +3329,11 @@ fsevents@~2.1.2:
     koa: ^2.13.0
     koa-bodyparser: ^4.3.0
     koa-helmet: ^6.0.0
-    mongoose: ^5.10.7
-    nodemon: ^2.0.4
-    prettier: ^2.1.2
-    ts-node: ^9.0.0
-    typescript: ^4.0.5
+    mongoose: ^5.11.8
+    nodemon: ^2.0.6
+    prettier: ^2.2.1
+    ts-node: ^9.1.1
+    typescript: ^4.1.3
   languageName: unknown
   linkType: soft
 
@@ -3461,7 +3461,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"mongoose@npm:5.11.8, mongoose@npm:^5.10.7":
+"mongoose@npm:5.11.8, mongoose@npm:^5.11.8":
   version: 5.11.8
   resolution: "mongoose@npm:5.11.8"
   dependencies:
@@ -3598,7 +3598,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"nodemon@npm:^2.0.4":
+"nodemon@npm:^2.0.6":
   version: 2.0.6
   resolution: "nodemon@npm:2.0.6"
   dependencies:
@@ -4000,7 +4000,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.1.2":
+"prettier@npm:^2.2.1":
   version: 2.2.1
   resolution: "prettier@npm:2.2.1"
   bin:
@@ -4949,7 +4949,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"ts-node@npm:^9.0.0":
+"ts-node@npm:^9.1.1":
   version: 9.1.1
   resolution: "ts-node@npm:9.1.1"
   dependencies:
@@ -5060,7 +5060,7 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-typescript@^4.0.5:
+typescript@^4.1.3:
   version: 4.1.3
   resolution: "typescript@npm:4.1.3"
   bin:
@@ -5070,7 +5070,7 @@ typescript@^4.0.5:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.0.5#builtin<compat/typescript>":
+"typescript@patch:typescript@^4.1.3#builtin<compat/typescript>":
   version: 4.1.3
   resolution: "typescript@patch:typescript@npm%3A4.1.3#builtin<compat/typescript>::version=4.1.3&hash=cc6730"
   bin:
