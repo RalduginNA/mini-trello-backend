@@ -9,4 +9,11 @@ const schema = new Schema({
   createdAt: { type: Date, default: Date.now, required: true },
 })
 
+schema.pre<RefreshSessionDoc>('save', async function () {
+  await this.model('RefreshSession').deleteMany({
+    _id: { $ne: this._id },
+    userId: this.userId,
+  })
+})
+
 export default model<RefreshSessionDoc>('RefreshSession', schema)
