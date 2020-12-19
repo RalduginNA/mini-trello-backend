@@ -1,8 +1,14 @@
+# IDE
 .vscode/
-node_modules/
-lib/
-*.env
+
+# system
 .DS_Store
+
+# dependencies
+node_modules/
+
+# environment 
+*.env
 
 # yarn
 .yarn/*
