@@ -34,13 +34,15 @@ const signIn = async (ctx: Ctx<SignInDto>) => {
   const savedRefreshSession = await refreshSession.save()
 
   ctx.body = {
-    id: _id,
-    username,
-    email: user.email,
+    user: {
+      id: _id,
+      username,
+      email: user.email,
+      createdAt,
+      updatedAt,
+    },
     accessToken,
     refreshToken: savedRefreshSession.refreshToken,
-    createdAt,
-    updatedAt,
   }
 }
 
@@ -62,13 +64,15 @@ const signUp = async (ctx: Ctx<SignUpDto>) => {
   const savedRefreshSession = await refreshSession.save()
 
   ctx.body = {
-    id: savedUser._id,
-    username: savedUser.username,
-    email: savedUser.email,
+    user: {
+      id: savedUser._id,
+      username: savedUser.username,
+      email: savedUser.email,
+      createdAt: savedUser.createdAt,
+      updatedAt: savedUser.updatedAt,
+    },
     accessToken,
     refreshToken: savedRefreshSession.refreshToken,
-    createdAt: savedUser.createdAt,
-    updatedAt: savedUser.updatedAt,
   }
 }
 
