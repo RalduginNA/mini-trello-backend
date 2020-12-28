@@ -57,6 +57,8 @@ const deleteList = async (ctx: Ctx<{}, ParamsId>) => {
     ListModel.deleteOne({ _id: id }),
     CardModel.deleteMany({ listId: id }),
   ])
+
+  ctx.status = STATUS_CODES.OK
 }
 
 export default {
