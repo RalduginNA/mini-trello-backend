@@ -92,6 +92,8 @@ const deleteBoard = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
   )
 
   await BoardModel.deleteOne({ _id: id })
+
+  ctx.status = STATUS_CODES.OK
 }
 
 export default {

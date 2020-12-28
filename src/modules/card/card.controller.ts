@@ -3,6 +3,7 @@ import { CreateCardDto, UpdateCardDto } from './card.interfaces'
 import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
 import { verifyDocumentId } from '../../helpers/document'
+import { STATUS_CODES } from '../../constants/api'
 
 const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request
@@ -54,6 +55,8 @@ const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
 const deleteCard = async (ctx: Ctx<{}, ParamsId>) => {
   const { id } = ctx.params
   await CardModel.deleteOne({ _id: id })
+
+  ctx.status = STATUS_CODES.OK
 }
 
 export default {
