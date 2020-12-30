@@ -51,9 +51,15 @@ const signRefreshToken = async (payload: TokenPayload) => {
 const verifyToken = async (token: string, refresh?: boolean) => {
   const { JWT_SECRET, JWT_REFRESH_SECRET, JWT_ALGORITHM } = config.auth.jwt
   const secret = !refresh ? JWT_SECRET : JWT_REFRESH_SECRET
-  const decoded = (await jwt.verify(token, secret, {
-    algorithms: [JWT_ALGORITHM],
-  })) as TokenPayload
+  let decoded
+
+  try {
+    decoded = (await jwt.verify(token, secret, {
+      algorithms: [JWT_ALGORITHM],
+    })) as TokenPayload
+  } catch (err) {
+    throw new HttpError(STATUS_CODES.UNAUTHORIZED, err?.message)
+  }
 
   if (!decoded || typeof decoded !== 'object') {
     throw new HttpError(
