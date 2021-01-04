@@ -1,7 +1,7 @@
 import Joi from 'joi'
 import { SignInDto, SignUpDto, RefreshDto } from './auth.interfaces'
 import { PASSWORD_REGEX } from '../../constants/general'
-import { ExtendsKeys } from './../../types'
+import { ExtendsKeys } from '../../types'
 
 const signIn: ExtendsKeys<SignInDto> = {
   email: Joi.string().email().required(),

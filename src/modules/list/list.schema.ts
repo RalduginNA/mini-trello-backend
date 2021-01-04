@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { CreateListDto, UpdateListDto } from './list.interfaces'
-import { ExtendsKeys } from './../../types'
+import { ExtendsKeys } from '../../types'
 
 const create: ExtendsKeys<CreateListDto> = {
   name: Joi.string().required(),

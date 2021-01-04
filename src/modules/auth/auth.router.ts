@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import AuthScheme from './auth.scheme'
+import AuthSchema from './auth.schema'
 import AuthController from './auth.controller'
 import validateRequest from '../../middlewares/validateRequest'
 
@@ -7,17 +7,17 @@ const authRouter = new Router({ prefix: `/auth` })
 
 authRouter.post(
   '/signIn',
-  validateRequest(AuthScheme.signIn),
+  validateRequest(AuthSchema.signIn),
   AuthController.signIn,
 )
 authRouter.post(
   '/signUp',
-  validateRequest(AuthScheme.signUp),
+  validateRequest(AuthSchema.signUp),
   AuthController.signUp,
 )
 authRouter.post(
   '/refresh',
-  validateRequest(AuthScheme.refresh),
+  validateRequest(AuthSchema.refresh),
   AuthController.refresh,
 )
 

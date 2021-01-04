@@ -1,6 +1,6 @@
-import { ExtendsKeys } from './../../types'
 import Joi from 'joi'
 import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
+import { ExtendsKeys } from '../../types'
 
 const create: ExtendsKeys<CreateBoardDto> = {
   name: Joi.string().required(),
