@@ -1,6 +1,6 @@
 import Joi from 'joi'
 import { CreateCardDto, UpdateCardDto } from './card.interfaces'
-import { ExtendsKeys } from './../../types'
+import { ExtendsKeys } from '../../types'
 
 const create: ExtendsKeys<CreateCardDto> = {
   title: Joi.string().required(),

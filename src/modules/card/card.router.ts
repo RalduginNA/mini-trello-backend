@@ -1,6 +1,6 @@
 import Router from '@koa/router'
 import CardController from './card.controller'
-import CardScheme from './card.scheme'
+import CardScheme from './card.schema'
 import validateRequest from '../../middlewares/validateRequest'
 
 const router = new Router({ prefix: `/cards` })

@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import ListScheme from './list.scheme'
+import ListScheme from './list.schema'
 import ListController from './list.controller'
 import validateRequest from '../../middlewares/validateRequest'
 

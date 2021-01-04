@@ -1,6 +1,6 @@
 import Router from '@koa/router'
 import BoardController from './board.controller'
-import BoardScheme from './board.scheme'
+import BoardScheme from './board.schema'
 import validateRequest from '../../middlewares/validateRequest'
 
 const router = new Router({ prefix: `/boards` })
