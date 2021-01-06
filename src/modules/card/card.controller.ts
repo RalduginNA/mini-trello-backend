@@ -4,7 +4,7 @@ import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
 import { verifyDocumentId } from '../../helpers/document'
 import { STATUS_CODES } from '../../constants/api'
-import verifyMembership from '../../helpers/verifyMembership'
+import { verifyMembership } from '../../helpers/permissions'
 
 const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request

@@ -5,7 +5,7 @@ import { Ctx, ParamsId } from '../../types'
 import { STATUS_CODES } from '../../constants/api'
 import MembershipModel from '../membership/membership.model'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
-import verifyMembership from '../../helpers/verifyMembership'
+import { verifyMembership } from '../../helpers/permissions'
 
 const getAll = async (ctx: Ctx<{}>) => {
   const { user } = ctx.state

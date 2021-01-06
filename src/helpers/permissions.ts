@@ -5,7 +5,7 @@ import { MEMBERSHIP_ROLES } from '../constants/general'
 import membershipModel from '../modules/membership/membership.model'
 import HttpError from './HttpError'
 
-const verifyMembership = async (
+export const verifyMembership = async (
   userId: Types.ObjectId,
   boardId: Types.ObjectId,
   role?: MEMBERSHIP_ROLES,
@@ -23,5 +23,3 @@ const verifyMembership = async (
     throw new HttpError(STATUS_CODES.BAD_REQUEST, ErrorCodes.Permission)
   }
 }
-
-export default verifyMembership
