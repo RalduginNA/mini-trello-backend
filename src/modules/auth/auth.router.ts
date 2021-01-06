@@ -6,12 +6,12 @@ import validateRequest from '../../middlewares/validateRequest'
 const authRouter = new Router({ prefix: `/auth` })
 
 authRouter.post(
-  '/signIn',
+  '/sign-in',
   validateRequest(AuthSchema.signIn),
   AuthController.signIn,
 )
 authRouter.post(
-  '/signUp',
+  '/sign-up',
   validateRequest(AuthSchema.signUp),
   AuthController.signUp,
 )
