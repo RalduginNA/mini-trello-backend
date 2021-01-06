@@ -4,9 +4,15 @@ import { CreateListDto, UpdateListDto } from './list.interfaces'
 import ListModel from './list.model'
 import CardModel from '../card/card.model'
 import { STATUS_CODES } from '../../constants/api'
+import { verifyDocumentId } from '../../helpers/document'
+import verifyMembership from '../../helpers/verifyMembership'
 
 const create = async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request
+  const { user } = ctx.state
+
+  await verifyMembership(user._id, body.boardId)
+
   const list = new ListModel({ ...body })
   const savedList = await list.save()
 
@@ -16,6 +22,10 @@ const create = async (ctx: Ctx<CreateListDto>) => {
 const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
+  const { user } = ctx.state
+
+  const list = await verifyDocumentId(ListModel, id)
+  await verifyMembership(user._id, list.boardId)
 
   if (body.position) {
     const list = await ListModel.findById(id)
@@ -39,19 +49,21 @@ const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
     )
   }
 
-  const list = await ListModel.findByIdAndUpdate(
+  const updatedList = await ListModel.findByIdAndUpdate(
     { _id: id },
     { $set: { ...body } },
     { new: true },
   )
 
-  ctx.body = list
+  ctx.body = updatedList
 }
 
 const deleteList = async (ctx: Ctx<{}, ParamsId>) => {
   const { id } = ctx.params
-  const list = await ListModel.findById(id)
-  ctx.assert(list, STATUS_CODES.BAD_REQUEST, 'List not found')
+  const { user } = ctx.state
+
+  const list = await verifyDocumentId(ListModel, id)
+  await verifyMembership(user._id, list.boardId)
 
   await Promise.all([
     ListModel.deleteOne({ _id: id }),

@@ -4,10 +4,14 @@ import { MOVE_STEP } from '../../constants/general'
 import { Ctx, ParamsId } from '../../types'
 import { verifyDocumentId } from '../../helpers/document'
 import { STATUS_CODES } from '../../constants/api'
+import verifyMembership from '../../helpers/verifyMembership'
 
 const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request
   const { _id: userId } = ctx.state.user
+
+  await verifyMembership(userId, body.boardId)
+
   const card = new CardModel({ ...body, userId })
   const savedCard = await card.save()
 
@@ -17,7 +21,10 @@ const create = async (ctx: Ctx<CreateCardDto>) => {
 const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
+  const { user } = ctx.state
+
   const card = await verifyDocumentId(CardModel, id)
+  await verifyMembership(user._id, card.boardId)
 
   if (body.position || body.listId) {
     const position = body.position || card.position
@@ -54,6 +61,11 @@ const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
 
 const deleteCard = async (ctx: Ctx<{}, ParamsId>) => {
   const { id } = ctx.params
+  const { user } = ctx.state
+
+  const card = await verifyDocumentId(CardModel, id)
+  await verifyMembership(user._id, card.boardId)
+
   await CardModel.deleteOne({ _id: id })
 
   ctx.status = STATUS_CODES.OK

@@ -6,4 +6,5 @@ export const ErrorCodes = {
     Authorization: 'Invalid authorization',
     AuthorizationScheme: 'Invalid authorization scheme',
   },
+  Permission: "Don't have permission",
 }

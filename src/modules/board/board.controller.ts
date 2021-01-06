@@ -5,6 +5,7 @@ import { Ctx, ParamsId } from '../../types'
 import { STATUS_CODES } from '../../constants/api'
 import MembershipModel from '../membership/membership.model'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
+import verifyMembership from '../../helpers/verifyMembership'
 
 const getAll = async (ctx: Ctx<{}>) => {
   const { user } = ctx.state
@@ -16,11 +17,7 @@ const get = async (ctx: Ctx<{}, ParamsId>) => {
   const boardId = ctx.params.id
   const userId = ctx.state.user._id
 
-  const membership = await MembershipModel.findOne({
-    boardId: boardId,
-    userId: userId,
-  })
-  ctx.assert(membership, STATUS_CODES.BAD_REQUEST, "Don't have permission")
+  await verifyMembership(userId, boardId)
 
   const board = await BoardModel.findById(boardId)
     .populate('lists')
@@ -62,11 +59,8 @@ const create = async (ctx: Ctx<CreateBoardDto>) => {
 const update = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
   const { id } = ctx.params
   const { user } = ctx.state
-  const membership = await MembershipModel.findOne({
-    boardId: id,
-    userId: user._id,
-  })
-  ctx.assert(membership, STATUS_CODES.BAD_REQUEST, "Don't have permission")
+
+  await verifyMembership(user._id, id)
 
   const board = await BoardModel.findByIdAndUpdate(
     { _id: id },
@@ -81,15 +75,8 @@ const update = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
 const deleteBoard = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
   const { id } = ctx.params
   const { user } = ctx.state
-  const membership = await MembershipModel.findOne({
-    boardId: id,
-    userId: user._id,
-  })
-  ctx.assert(
-    membership && membership.role === MEMBERSHIP_ROLES.ADMIN,
-    STATUS_CODES.BAD_REQUEST,
-    "Don't have permission",
-  )
+
+  await verifyMembership(user._id, id, MEMBERSHIP_ROLES.ADMIN)
 
   await BoardModel.deleteOne({ _id: id })
 
