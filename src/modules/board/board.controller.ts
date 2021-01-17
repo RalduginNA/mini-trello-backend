@@ -24,6 +24,9 @@ const get = async (ctx: Ctx<{}, ParamsId>) => {
     .populate('cards')
     .populate('memberships')
 
+  board.viewedAt = new Date()
+  await board.save()
+
   ctx.assert(board, STATUS_CODES.BAD_REQUEST, 'Board not found')
 
   ctx.body = board

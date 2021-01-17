@@ -18,6 +18,16 @@ const create = async (ctx: Ctx<CreateCardDto>) => {
   ctx.body = savedCard
 }
 
+const get = async (ctx: Ctx<{}, ParamsId>) => {
+  const { id } = ctx.params
+  const { user } = ctx.state
+
+  const card = await verifyDocumentId(CardModel, id)
+  await verifyMembership(user._id, card.boardId)
+
+  ctx.body = card
+}
+
 const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   const { body } = ctx.request
   const { id } = ctx.params
@@ -72,6 +82,7 @@ const deleteCard = async (ctx: Ctx<{}, ParamsId>) => {
 }
 
 export default {
+  get,
   create,
   update,
   delete: deleteCard,

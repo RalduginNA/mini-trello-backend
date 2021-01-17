@@ -9,6 +9,7 @@ interface BoardDoc extends Board, Timestamp, Document {}
 const schema = new Schema({
   name: { type: String, required: true },
   users: { type: [{ type: Types.ObjectId, ref: 'User' }], required: true },
+  viewedAt: { type: Date, default: Date.now() },
   settings: {
     backgroundImage: { type: String, required: true, default: '' },
     permissionLevel: {
