@@ -20,7 +20,7 @@ const getAll = async (ctx: Ctx<{}>) => {
     const lastView = lastViews.find(
       ({ boardId }) => String(boardId) === board.id,
     )
-    return { ...board.toObject(), lastView: lastView.date }
+    return { ...board.toObject(), lastView: lastView?.createdAt }
   })
 
   ctx.body = populatedBoards

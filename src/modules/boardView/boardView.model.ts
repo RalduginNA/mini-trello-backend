@@ -8,7 +8,6 @@ interface BoardViewDoc extends BoardView, Timestamp, Document {}
 const schema = new Schema({
   userId: { type: Types.ObjectId, required: true, ref: 'User' },
   boardId: { type: Types.ObjectId, required: true, ref: 'Board' },
-  date: { type: Date, required: true, default: Date.now() },
 })
 
 schema.pre<BoardViewDoc>('save', async function () {
