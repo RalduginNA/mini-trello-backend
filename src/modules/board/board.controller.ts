@@ -1,16 +1,29 @@
-import BoardModel from '../board/board.model'
-import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
-import UserModel from '../user/user.model'
-import { Ctx, ParamsId } from '../../types'
 import { STATUS_CODES } from '../../constants/api'
-import MembershipModel from '../membership/membership.model'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
 import { verifyMembership } from '../../helpers/permissions'
+import { Ctx, ParamsId } from '../../types'
+import BoardModel from '../board/board.model'
+import BoardViewModel from '../boardView/boardView.model'
+import MembershipModel from '../membership/membership.model'
+import UserModel from '../user/user.model'
+import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
 
 const getAll = async (ctx: Ctx<{}>) => {
   const { user } = ctx.state
-  const boards = await BoardModel.find({ users: { $in: [user._id] } })
-  ctx.body = boards
+
+  const [boards, lastViews] = await Promise.all([
+    BoardModel.find({ users: { $in: [user._id] } }),
+    BoardViewModel.find({ userId: user._id }),
+  ])
+
+  const populatedBoards = boards.map((board) => {
+    const lastView = lastViews.find(
+      ({ boardId }) => String(boardId) === board.id,
+    )
+    return { ...board.toObject(), lastView: lastView.date }
+  })
+
+  ctx.body = populatedBoards
 }
 
 const get = async (ctx: Ctx<{}, ParamsId>) => {
@@ -19,13 +32,12 @@ const get = async (ctx: Ctx<{}, ParamsId>) => {
 
   await verifyMembership(userId, boardId)
 
+  await new BoardViewModel({ userId, boardId }).save()
+
   const board = await BoardModel.findById(boardId)
     .populate('lists')
     .populate('cards')
     .populate('memberships')
-
-  board.viewedAt = new Date()
-  await board.save()
 
   ctx.assert(board, STATUS_CODES.BAD_REQUEST, 'Board not found')
 

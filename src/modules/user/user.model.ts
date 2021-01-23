@@ -1,9 +1,9 @@
-import { Schema, model, Document, Types } from 'mongoose'
-import { User } from './user.interfaces'
-import { TokenPayload } from '../../helpers/jwt'
-import { Timestamp } from '../../types'
+import { Document, model, Schema, Types } from 'mongoose'
 import hash from '../../helpers/hash'
+import { TokenPayload } from '../../helpers/jwt'
 import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { Timestamp } from '../../types'
+import { User } from './user.interfaces'
 
 interface UserDoc extends User, Timestamp, Document {
   setPassword: (password: string) => Promise<void>
@@ -48,6 +48,8 @@ schema.methods.getTokenPayload = function (): TokenPayload {
     username: this.username,
   }
 }
+
+// dateLastView
 
 schema.plugin(generalOptionsPlugin)
 

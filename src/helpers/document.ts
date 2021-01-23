@@ -1,4 +1,4 @@
-import { Model, Types, Document } from 'mongoose'
+import { Document, Model, Types } from 'mongoose'
 
 export async function verifyDocumentId<T extends Document>(
   model: Model<T>,
@@ -15,10 +15,11 @@ export async function verifyDocumentId<T extends Document>(
   return document
 }
 
-export async function verifyDocumentIds<T>(
+export async function verifyDocumentIds(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   arr: Array<[model: Model<any>, id: Types.ObjectId | string, errMsg?: string]>,
 ) {
-  Promise.all(
+  return Promise.all(
     arr.map(([model, id, errMsg]) => verifyDocumentId(model, id, errMsg)),
   )
 }

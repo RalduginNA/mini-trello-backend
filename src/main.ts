@@ -1,12 +1,12 @@
-import Koa from 'koa'
 import cors from '@koa/cors'
+import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import helmet from 'koa-helmet'
+import config from './config'
 import db from './db'
 import colors from './helpers/colors'
 import errorHandler from './middlewares/errorHandler'
 import setupRoutes from './setupRoutes'
-import config from './config'
 
 const app = new Koa()
 const rootRouter = setupRoutes()

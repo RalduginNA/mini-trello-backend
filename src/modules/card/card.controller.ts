@@ -1,10 +1,10 @@
-import CardModel from './card.model'
-import { CreateCardDto, UpdateCardDto } from './card.interfaces'
-import { MOVE_STEP } from '../../constants/general'
-import { Ctx, ParamsId } from '../../types'
-import { verifyDocumentId } from '../../helpers/document'
 import { STATUS_CODES } from '../../constants/api'
+import { MOVE_STEP } from '../../constants/general'
+import { verifyDocumentId } from '../../helpers/document'
 import { verifyMembership } from '../../helpers/permissions'
+import { Ctx, ParamsId } from '../../types'
+import { CreateCardDto, UpdateCardDto } from './card.interfaces'
+import CardModel from './card.model'
 
 const create = async (ctx: Ctx<CreateCardDto>) => {
   const { body } = ctx.request

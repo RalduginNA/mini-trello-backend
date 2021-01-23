@@ -541,23 +541,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/mongodb@npm:*, @types/mongodb@npm:^3.5.27":
+"@types/mongodb@npm:^3.5.27":
   version: 3.6.3
   resolution: "@types/mongodb@npm:3.6.3"
   dependencies:
     "@types/bson": "*"
     "@types/node": "*"
   checksum: 2ccf239c496ad5a36ff014211a073a28878ddeda7f8a73c7e2f75a9587c295dec60fff57b6036b789c9e37d74923ddfb66e1d2f70c659b3f61c9382d2bff6b38
-  languageName: node
-  linkType: hard
-
-"@types/mongoose@npm:^5.10.3":
-  version: 5.10.3
-  resolution: "@types/mongoose@npm:5.10.3"
-  dependencies:
-    "@types/mongodb": "*"
-    "@types/node": "*"
-  checksum: d7f09d6bd91936a50cabff8b39e40c1313be2aa1ddfb71eea26b87cce75ee3e82947e8f0f07eda7fd86344be14e068674295081c5672d3f02df171c226adf5c6
   languageName: node
   linkType: hard
 
@@ -3497,7 +3487,6 @@ fsevents@~2.1.2:
     "@types/koa-helmet": ^6.0.1
     "@types/koa__cors": ^3.0.2
     "@types/koa__router": ^8.0.3
-    "@types/mongoose": ^5.10.3
     "@types/node": ^14.14.13
     "@typescript-eslint/eslint-plugin": ^4.10.0
     "@typescript-eslint/parser": ^4.10.0

@@ -4,7 +4,6 @@ import { BOARD_PERMISSION_LEVEL } from '../../constants/general'
 export interface Board {
   name: string
   users: Array<Types.ObjectId>
-  viewedAt: Date
   settings: {
     backgroundImage: string
     permissionLevel: BOARD_PERMISSION_LEVEL
