@@ -1,9 +1,11 @@
 {
   "name": "mini-trello-backend",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "src/main.ts",
   "scripts": {
+    "start": "NODE_ENV=production node dist/main.js",
     "dev": "NODE_ENV=development nodemon",
+    "build": "tsc -p .",
     "debug": "NODE_ENV=debug nodemon",
     "lint": "eslint \"**/*.ts\" --ignore-pattern node_modules/",
     "prettier-check": "prettier --check"
