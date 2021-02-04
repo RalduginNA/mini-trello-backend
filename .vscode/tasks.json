@@ -7,7 +7,9 @@
         "-p",
         "."
     ],
-    "showOutput": "silent",
     "isBackground": true,
-    "problemMatcher": "$tsc-watch"
+    "problemMatcher": "$tsc-watch",
+    "presentation": {
+        "reveal":"silent",
+    }
 }
