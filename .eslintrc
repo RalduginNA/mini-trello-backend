@@ -1,0 +1,33 @@
+{
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020,
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true
+    }
+  },
+  "env": {
+    "node": true,
+    "es6": true
+  },
+  "plugins": ["@typescript-eslint", "security"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:security/recommended"
+    //? "plugin:node/recommended"
+  ],
+  "rules": {
+    "security/detect-object-injection": "off",
+    "explicit-module-boundary-types": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-empty-interface": [
+      "error",
+      {
+        "allowSingleExtends": true
+      }
+    ]
+  }
+}

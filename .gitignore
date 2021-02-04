@@ -1,0 +1,19 @@
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+
+# dependencies
+node_modules/
+
+# environment 
+*.env
+
+# yarn
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
