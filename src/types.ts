@@ -18,10 +18,9 @@ interface CtxRequest<T> extends Request {
   body?: T
 }
 
-export interface Ctx<BodyT = {}, ParamsT = {}, StateT = CtxState>
+export interface Ctx<BodyT = {}, StateT = CtxState>
   extends ParameterizedContext<StateT, RouterParamContext<StateT, {}>> {
   request: CtxRequest<BodyT>
-  params: ParamsT
   //? body
 }
 

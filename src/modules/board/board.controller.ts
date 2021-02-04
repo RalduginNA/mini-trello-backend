@@ -1,14 +1,14 @@
 import { STATUS_CODES } from '../../constants/api'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
 import { verifyMembership } from '../../helpers/permissions'
-import { Ctx, ParamsId } from '../../types'
+import { Ctx } from '../../types'
 import BoardModel from '../board/board.model'
 import BoardViewModel from '../boardView/boardView.model'
 import MembershipModel from '../membership/membership.model'
 import UserModel from '../user/user.model'
 import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
 
-const getAll = async (ctx: Ctx<{}>) => {
+const getAll = async (ctx: Ctx) => {
   const { user } = ctx.state
 
   const [boards, lastViews] = await Promise.all([
@@ -26,7 +26,7 @@ const getAll = async (ctx: Ctx<{}>) => {
   ctx.body = populatedBoards
 }
 
-const get = async (ctx: Ctx<{}, ParamsId>) => {
+const get = async (ctx: Ctx) => {
   const boardId = ctx.params.id
   const userId = ctx.state.user._id
 
@@ -71,7 +71,7 @@ const create = async (ctx: Ctx<CreateBoardDto>) => {
   ctx.body = savedBoard
 }
 
-const update = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdateBoardDto>) => {
   const { id } = ctx.params
   const { user } = ctx.state
 
@@ -87,7 +87,7 @@ const update = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
   ctx.body = board
 }
 
-const deleteBoard = async (ctx: Ctx<UpdateBoardDto, ParamsId>) => {
+const deleteBoard = async (ctx: Ctx<UpdateBoardDto>) => {
   const { id } = ctx.params
   const { user } = ctx.state
 

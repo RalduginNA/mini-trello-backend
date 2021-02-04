@@ -2,7 +2,7 @@ import { STATUS_CODES } from '../../constants/api'
 import { MOVE_STEP } from '../../constants/general'
 import { verifyDocumentId } from '../../helpers/document'
 import { verifyMembership } from '../../helpers/permissions'
-import { Ctx, ParamsId } from '../../types'
+import { Ctx } from '../../types'
 import { CreateCardDto, UpdateCardDto } from './card.interfaces'
 import CardModel from './card.model'
 
@@ -18,7 +18,7 @@ const create = async (ctx: Ctx<CreateCardDto>) => {
   ctx.body = savedCard
 }
 
-const get = async (ctx: Ctx<{}, ParamsId>) => {
+const get = async (ctx: Ctx) => {
   const { id } = ctx.params
   const { user } = ctx.state
 
@@ -28,7 +28,7 @@ const get = async (ctx: Ctx<{}, ParamsId>) => {
   ctx.body = card
 }
 
-const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdateCardDto>) => {
   const { body } = ctx.request
   const { id } = ctx.params
   const { user } = ctx.state
@@ -69,7 +69,7 @@ const update = async (ctx: Ctx<UpdateCardDto, ParamsId>) => {
   ctx.body = updatedCard
 }
 
-const deleteCard = async (ctx: Ctx<{}, ParamsId>) => {
+const deleteCard = async (ctx: Ctx) => {
   const { id } = ctx.params
   const { user } = ctx.state
 

@@ -7,7 +7,7 @@ import HttpError from './HttpError'
 
 export const verifyMembership = async (
   userId: Types.ObjectId,
-  boardId: Types.ObjectId,
+  boardId: Types.ObjectId | string,
   role?: MEMBERSHIP_ROLES,
 ) => {
   const membership = await membershipModel.findOne({

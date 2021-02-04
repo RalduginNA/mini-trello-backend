@@ -1,5 +1,5 @@
 import { MOVE_STEP } from '../../constants/general'
-import { Ctx, ParamsId } from '../../types'
+import { Ctx } from '../../types'
 import { CreateListDto, UpdateListDto } from './list.interfaces'
 import ListModel from './list.model'
 import CardModel from '../card/card.model'
@@ -19,7 +19,7 @@ const create = async (ctx: Ctx<CreateListDto>) => {
   ctx.body = { ...savedList.toJSON(), cards: [] }
 }
 
-const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
+const update = async (ctx: Ctx<UpdateListDto>) => {
   const { body } = ctx.request
   const { id } = ctx.params
   const { user } = ctx.state
@@ -58,7 +58,7 @@ const update = async (ctx: Ctx<UpdateListDto, ParamsId>) => {
   ctx.body = updatedList
 }
 
-const deleteList = async (ctx: Ctx<{}, ParamsId>) => {
+const deleteList = async (ctx: Ctx) => {
   const { id } = ctx.params
   const { user } = ctx.state
 

@@ -11,7 +11,7 @@ interface UserDoc extends User, Timestamp, Document {
   getTokenPayload: () => TokenPayload
 }
 
-const schema = new Schema({
+const schema = new Schema<UserDoc>({
   username: {
     type: String,
     lowercase: true,
