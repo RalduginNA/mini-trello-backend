@@ -4,9 +4,9 @@ import BoardModel from '../board/board.model'
 import ListModel from '../list/list.model'
 import UserModel from '../user/user.model'
 import { STATUS_CODES } from '../../constants/api'
-import { verifyDocumentIds } from '../../helpers/document'
-import HttpError from '../../helpers/HttpError'
-import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { verifyDocumentIds } from '../../utils/document'
+import HttpError from '../../utils/HttpError'
+import { generalOptionsPlugin } from '../../utils/schemaPlugin'
 import { Timestamp } from '../../types'
 
 interface CardDoc extends Card, Timestamp, Document {}

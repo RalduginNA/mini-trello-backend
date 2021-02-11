@@ -1,7 +1,7 @@
 import { Middleware } from 'koa'
 import { ObjectSchema, ValidationOptions } from 'joi'
 import { STATUS_CODES } from '../constants/api'
-import HttpError from '../helpers/HttpError'
+import HttpError from '../utils/HttpError'
 
 const defaultValidationOptions = {
   abortEarly: false, // include all errors

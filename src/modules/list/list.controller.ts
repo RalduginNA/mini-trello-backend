@@ -4,8 +4,8 @@ import { CreateListDto, UpdateListDto } from './list.interfaces'
 import ListModel from './list.model'
 import CardModel from '../card/card.model'
 import { STATUS_CODES } from '../../constants/api'
-import { verifyDocumentId } from '../../helpers/document'
-import { verifyMembership } from '../../helpers/permissions'
+import { verifyDocumentId } from '../../utils/document'
+import { verifyMembership } from '../../utils/permissions'
 
 const create = async (ctx: Ctx<CreateListDto>) => {
   const { body } = ctx.request

@@ -1,6 +1,6 @@
 import { Document, model, Schema, Types } from 'mongoose'
 import { BOARD_PERMISSION_LEVEL } from '../../constants/general'
-import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { generalOptionsPlugin } from '../../utils/schemaPlugin'
 import { Timestamp } from '../../types'
 import { Board } from './board.interfaces'
 

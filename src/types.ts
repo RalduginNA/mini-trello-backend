@@ -1,7 +1,7 @@
 import { Request, ParameterizedContext } from 'koa'
 import { RouterParamContext } from '@koa/router'
 import { Types } from 'mongoose'
-import { TokenPayload } from './helpers/jwt'
+import { TokenPayload } from './utils/jwt'
 
 export interface Timestamp {
   createdAt: Date

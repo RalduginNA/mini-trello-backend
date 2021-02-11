@@ -1,6 +1,6 @@
 import { STATUS_CODES } from '../../constants/api'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
-import { verifyMembership } from '../../helpers/permissions'
+import { verifyMembership } from '../../utils/permissions'
 import { Ctx } from '../../types'
 import BoardModel from '../board/board.model'
 import BoardViewModel from '../boardView/boardView.model'

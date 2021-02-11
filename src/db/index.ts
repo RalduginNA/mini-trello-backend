@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import colors from '../helpers/colors'
+import colors from '../utils/colors'
 import config from '../config'
 
 const connect = async () => {

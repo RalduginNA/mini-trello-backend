@@ -1,5 +1,5 @@
 import { Document, model, Schema, Types } from 'mongoose'
-import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { generalOptionsPlugin } from '../../utils/schemaPlugin'
 import { Timestamp } from '../../types'
 import { BoardView } from './boardView.interfaces'
 

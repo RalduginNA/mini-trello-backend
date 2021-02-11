@@ -1,6 +1,6 @@
 import { Schema, model, Document, Types } from 'mongoose'
 import { MEMBERSHIP_ROLES } from '../../constants/general'
-import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { generalOptionsPlugin } from '../../utils/schemaPlugin'
 import { Membership } from './membership.interfaces'
 
 interface MembershipDoc extends Membership, Document {}

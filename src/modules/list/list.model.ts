@@ -1,9 +1,9 @@
 import { Schema, model, Types, Document } from 'mongoose'
 import { STATUS_CODES } from '../../constants/api'
-import { verifyDocumentId } from '../../helpers/document'
-import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import { verifyDocumentId } from '../../utils/document'
+import { generalOptionsPlugin } from '../../utils/schemaPlugin'
 import { Timestamp } from '../../types'
-import HttpError from '../../helpers/HttpError'
+import HttpError from '../../utils/HttpError'
 import BoardModel from '../board/board.model'
 import { List } from './list.interfaces'
 

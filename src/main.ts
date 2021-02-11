@@ -4,7 +4,7 @@ import bodyParser from 'koa-bodyparser'
 import helmet from 'koa-helmet'
 import config from './config'
 import db from './db'
-import colors from './helpers/colors'
+import colors from './utils/colors'
 import errorHandler from './middlewares/errorHandler'
 import setupRoutes from './setupRoutes'
 

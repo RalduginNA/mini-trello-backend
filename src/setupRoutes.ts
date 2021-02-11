@@ -1,5 +1,5 @@
 import Router from '@koa/router'
-import combineRouters from './helpers/combineRouters'
+import combineRouters from './utils/combineRouters'
 import authentication from './middlewares/authentication'
 import authRouter from './modules/auth/auth.router'
 import boardRouter from './modules/board/board.router'

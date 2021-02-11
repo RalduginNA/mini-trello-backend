@@ -1,5 +1,5 @@
 import { Middleware } from 'koa'
-import jwt from '../helpers/jwt'
+import jwt from '../utils/jwt'
 import { STATUS_CODES } from '../constants/api'
 
 const authentication: Middleware = async (ctx, next) => {

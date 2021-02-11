@@ -1,7 +1,7 @@
 import { Document, model, Schema, Types } from 'mongoose'
-import hash from '../../helpers/hash'
-import { TokenPayload } from '../../helpers/jwt'
-import { generalOptionsPlugin } from '../../helpers/schemaPlugin'
+import hash from '../../utils/hash'
+import { TokenPayload } from '../../utils/jwt'
+import { generalOptionsPlugin } from '../../utils/schemaPlugin'
 import { Timestamp } from '../../types'
 import { User } from './user.interfaces'
 
