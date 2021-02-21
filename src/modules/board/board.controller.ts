@@ -3,24 +3,36 @@ import { MEMBERSHIP_ROLES } from '../../constants/general'
 import { verifyMembership } from '../../utils/permissions'
 import { Ctx } from '../../types'
 import BoardModel from '../board/board.model'
-import BoardViewModel from '../boardView/boardView.model'
+import BoardViewedModel from './boardViewed/boardViewed.model'
+import BoardFavoriteModel from './boardViewed/boardViewed.model'
 import MembershipModel from '../membership/membership.model'
 import UserModel from '../user/user.model'
-import { CreateBoardDto, UpdateBoardDto } from './board.interfaces'
+import {
+  BoardRelationBase,
+  CreateBoardDto,
+  UpdateBoardDto,
+} from './board.interfaces'
 
 const getAll = async (ctx: Ctx) => {
   const { user } = ctx.state
 
-  const [boards, lastViews] = await Promise.all([
+  const [boards, viewedBoards, staredBoards] = await Promise.all([
     BoardModel.find({ users: { $in: [user._id] } }),
-    BoardViewModel.find({ userId: user._id }),
+    BoardViewedModel.find({ userId: user._id }),
+    BoardFavoriteModel.find({ userId: user._id }),
   ])
 
   const populatedBoards = boards.map((board) => {
-    const lastView = lastViews.find(
-      ({ boardId }) => String(boardId) === board.id,
-    )
-    return { ...board.toObject(), lastView: lastView?.createdAt }
+    const predicate = ({ boardId }: BoardRelationBase) =>
+      String(boardId) === board.id
+    const viewedBoard = viewedBoards.find(predicate)
+    const staredBoard = staredBoards.find(predicate)
+
+    return {
+      ...board.toObject(),
+      lastView: viewedBoard?.createdAt,
+      stared: !!staredBoard,
+    }
   })
 
   ctx.body = populatedBoards
@@ -32,7 +44,7 @@ const get = async (ctx: Ctx) => {
 
   await verifyMembership(userId, boardId)
 
-  await new BoardViewModel({ userId, boardId }).save()
+  await new BoardViewedModel({ userId, boardId }).save()
 
   const board = await BoardModel.findById(boardId)
     .populate('lists')

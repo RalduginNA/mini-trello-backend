@@ -1,9 +1,9 @@
 import { Document, model, Schema, Types } from 'mongoose'
-import { generalOptionsPlugin } from '../../utils/schemaPlugin'
-import { Timestamp } from '../../types'
-import { BoardView } from './boardView.interfaces'
+import { generalOptionsPlugin } from '../../../utils/schemaPlugin'
+import { Timestamp } from '../../../types'
+import { BoardViewed } from './boardViewed.interfaces'
 
-interface BoardViewDoc extends BoardView, Timestamp, Document {}
+interface BoardViewDoc extends BoardViewed, Timestamp, Document {}
 
 const schema = new Schema({
   userId: { type: Types.ObjectId, required: true, ref: 'User' },
@@ -11,7 +11,7 @@ const schema = new Schema({
 })
 
 schema.pre<BoardViewDoc>('save', async function () {
-  await this.model('BoardView').deleteMany({
+  await this.model('BoardViewed').deleteMany({
     userId: this.userId,
     boardId: this.boardId,
   })
@@ -19,4 +19,4 @@ schema.pre<BoardViewDoc>('save', async function () {
 
 schema.plugin(generalOptionsPlugin)
 
-export default model<BoardViewDoc>('BoardView', schema)
+export default model<BoardViewDoc>('BoardViewed', schema, 'board_viewed')

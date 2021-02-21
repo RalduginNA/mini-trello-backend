@@ -16,4 +16,8 @@ schema.pre<RefreshSessionDoc>('save', async function () {
   })
 })
 
-export default model<RefreshSessionDoc>('RefreshSession', schema)
+export default model<RefreshSessionDoc>(
+  'RefreshSession',
+  schema,
+  'refresh_sessions',
+)

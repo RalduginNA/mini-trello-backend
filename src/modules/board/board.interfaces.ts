@@ -15,3 +15,8 @@ export interface CreateBoardDto extends Pick<Board, 'name'> {}
 export interface UpdateBoardDto {
   name?: string
 }
+
+export interface BoardRelationBase {
+  userId?: Types.ObjectId
+  boardId: Types.ObjectId
+}
